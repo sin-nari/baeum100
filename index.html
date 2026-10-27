@@ -119,6 +119,13 @@ section{padding-block:64px}
 .draft{font-size:14px;color:var(--muted);margin:10px 4px 0}
 
 /* 이야기 */
+.voices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 20px}
+.voice{margin:0;border-radius:var(--r);padding:24px 26px;background:var(--soft);border-left:6px solid var(--blue)}
+.voice.t{border-left-color:var(--green)}
+.voice figcaption{font-size:14px;font-weight:800;color:var(--blue)}
+.voice.t figcaption{color:var(--green)}
+.voice blockquote{margin:6px 0 0;font-family:var(--display);font-weight:400;font-size:clamp(20px,2.3vw,25px);line-height:1.5}
+@media (max-width:720px){.voices{grid-template-columns:1fr}}
 .stories{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .story{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:8px;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .story:hover{border-color:var(--blue)}
@@ -293,6 +300,10 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
           <p class="lead">새로운 배움에 도전한 학생과, 학생의 선택을 존중하며 새 수업을 만든 교사의 이야기입니다.</p>
         </div>
       </div>
+      <div class="voices">
+        <figure class="voice s"><figcaption>학생 · 공동교육과정</figcaption><blockquote>“다른 학교 친구들과 함께 배우며, 새로운 생각과 경험을 나눌 수 있었어요.”</blockquote></figure>
+        <figure class="voice t"><figcaption>교사 · 공동교육과정</figcaption><blockquote>“학생들이 한 걸음씩 나아가는 모습을 보며, 저도 함께 성장했어요.”</blockquote></figure>
+      </div>
       <div class="stories" id="storyList"></div>
     </div>
   </section>
@@ -383,12 +394,15 @@ const PRESS = [
   { date:"2026. 7. 22.", cat:"공동교육과정", title:"경기도 최초 ‘부천형 공동교육과정 계절학기’ 운영", desc:"학교에서 개설하기 어려운 과목을 방학까지 확장해 이수 기회를 보장하고, 여름방학 계절학기의 새로운 모델 운영", url:"" },
   { date:"2026. 8. 21.", cat:"대표기사", main:true, title:"학교 간 울타리 넘어 교육 잇는다… 부천형 공동교육과정 ‘눈길’", desc:"경기신문 · 학생 수요를 바탕으로 학교 간 교육과정을 공유하고 정규학기를 넘어 방학까지 과목 선택·이수 기회를 확대한 부천형 모델 집중 조명", url:"" },
   { date:"2026. 8. 24.", cat:"교원 역량", title:"「배움:성장」 교원 역량 강화 프로젝트 운영", desc:"교육과정·수업·평가 연수를 하나의 성장 과정으로 연결하고, 전문적 배움과 현장 실천 사례 나눔으로 교원 지원", url:"" },
-  { date:"2026. 9. 4.",  cat:"교원 역량", title:"「배움:성장」 기조강연 ‘AI 공존의 시대, 교육과정·수업·평가의 방향’ 운영", desc:"AI 공존 시대 교육의 방향을 살피고, 사전 질문과 현장 질의응답으로 교원의 고민을 함께 나누는 참여형 연수 운영", url:"" },
-  { date:"2026. 9. 17.", cat:"평가 혁신", title:"「배움:성장」 서·논술형 평가 직무연수 운영", desc:"평가의 이해에서 문항 제작, 교과별 실습으로 이어지는 단계적 연수로 교원의 평가 전문성과 실천 역량 강화", url:"" }
+  { date:"2026. 9. 4.",  cat:"교원 역량", title:"「배움:성장」 기조강연 ‘AI 공존의 시대, 교육과정·수업·평가의 방향’ 운영", desc:"김수환 총신대학교 교수와 AI 공존 시대 교육의 방향을 살피고, 사전 질문과 현장 질의응답으로 교원의 고민을 함께 나누는 참여형 연수 운영", url:"" },
+  { date:"2026. 9. 17.", cat:"평가 혁신", title:"「배움:성장」 서·논술형 평가 직무연수 운영", desc:"평가의 이해에서 문항 제작, 교과별 실습으로 이어지는 단계적 연수로 교원의 평가 전문성과 실천 역량 강화", url:"" },
+  { date:"2026. 10. 16.", cat:"평가 혁신", title:"부천교육지원청, ‘서·논술형 평가 연수’로 교원의 배움을 교실의 실천으로", desc:"교원 간 사례 나눔과 성찰을 통해 학생의 ‘생각하는 힘’을 키우는 평가 실천 지원", url:"" },
+  { date:"2026. 10. 19.", cat:"학부모 소통", title:"부천교육지원청, 초·중·고 학부모 맞춤형 ‘고교학점제 미래공감 ON 설명회’ 운영", desc:"학교급별 고교학점제 이해와 자녀의 진로·학업 설계 지원", url:"" },
+  { date:"2026. 10. 23.", cat:"평가 혁신", title:"부천교육지원청, 교육과정-수업-평가 통합설계로 학생평가 전문성 높인다", desc:"교원 역량 강화 프로젝트, 통합설계 특강부터 교과별 실천 사례 나눔까지", url:"" }
 ];
 
 const DOCS = [
-  { icon:"picture_as_pdf", title:"「부천 배움100이음」 책자 PDF", desc:"전체 23면 · 최종본 공개 예정", url:"" },
+  { icon:"picture_as_pdf", title:"「부천 배움100이음」 책자 PDF", desc:"전체 23면 · 2026년 10월 발행", url:"assets/baeum100.pdf" },
   { icon:"school", title:"「배움:성장」 교원 역량 강화 프로젝트", desc:"연수 안내 사이트로 이동", url:"https://sin-nari.github.io/baeum/" }
 ];
 
