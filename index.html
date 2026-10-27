@@ -208,7 +208,9 @@ section{padding-block:64px}
 .read.off{background:var(--soft);color:var(--muted);pointer-events:none}
 
 /* 자료 */
-.docs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ebook{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--blue);text-decoration:none;background:var(--soft);border-radius:999px;padding:6px 14px}
+.ebook:hover{text-decoration:underline}
 .doc{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;text-decoration:none}
 .doc .ico{font-size:34px;color:var(--blue)}
 .doc b{display:block;font-size:17px}
@@ -275,6 +277,7 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
       <div class="btns">
         <a class="btn main" href="#book"><span class="ico">menu_book</span>책자 보기</a>
         <a class="btn sub" href="#stories"><span class="ico">diversity_3</span>성장 이야기</a>
+        <a class="btn sub" href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener"><span class="ico">import_contacts</span>e북으로 넘겨 보기</a>
       </div>
       <div class="steps">
         <p class="steps-hint"><span class="ico">touch_app</span> 친구들을 눌러 보세요. 성장의 한마디가 들려요</p>
@@ -348,6 +351,7 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
           <div class="eyebrow">E-book</div>
           <h2>책자 보기</h2>
           <p class="lead">펼침면 단위로 넘겨 볼 수 있습니다. 이미지를 누르면 크게 볼 수 있습니다.</p>
+          <p class="lead"><a class="ebook" href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener"><span class="ico">import_contacts</span> 책장을 넘기듯 보는 <b>e북으로 보기</b> <span class="ico">open_in_new</span></a></p>
         </div>
       </div>
       <div class="viewer">
@@ -491,6 +495,7 @@ const PRESS = [
 ];
 
 const DOCS = [
+  { icon:"import_contacts", title:"「부천 배움100이음」 e북", desc:"책장을 넘기듯 보는 전자책", url:"https://koreaprint.co.kr/ebook/bucheon2026/" },
   { icon:"picture_as_pdf", title:"「부천 배움100이음」 책자 PDF", desc:"전체 23면 · 2026년 10월 발행", url:"assets/baeum100.pdf" },
   { icon:"school", title:"「배움:성장」 교원 역량 강화 프로젝트", desc:"연수 안내 사이트로 이동", url:"https://sin-nari.github.io/baeum/" }
 ];
