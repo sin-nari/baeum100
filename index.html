@@ -250,6 +250,25 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
   .thumbs img{height:56px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* 29개 학교 */
+.sch-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.sch-filter button{font:inherit;font-weight:700;font-size:16px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.sch-filter button b{font-family:var(--display);font-weight:400;color:var(--blue);margin-left:4px}
+.sch-filter button[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:#fff}.sch-filter button[aria-pressed="true"] b{color:#ffe28a}
+.sch-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted);margin:0 0 16px}
+.sch-legend i,.sch-card .tag i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.sch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;list-style:none;margin:0;padding:0}
+.sch-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0;border-top:5px solid var(--c,var(--blue))}
+.sch-card .hd{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sch-card .nm{font-family:var(--display);font-size:22px;line-height:1.2}
+.sch-card .yr{font-size:13px;color:var(--muted)}
+.sch-card .ty{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--c,var(--blue));white-space:nowrap}
+.sch-card .tag{font-size:15px;line-height:1.5}
+.sch-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 22px}
+.sch-sum div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;border-left:6px solid var(--c)}
+.sch-sum b{font-family:var(--display);font-weight:400;font-size:34px;color:var(--c)}.sch-sum span{display:block;font-size:15px;color:var(--muted)}
+@media (max-width:520px){.sch-sum{gap:8px}.sch-sum div{padding:10px;border-left-width:4px}.sch-sum b{font-size:26px}.sch-sum span{font-size:12px}.sch-grid{grid-template-columns:1fr 1fr}.sch-card .nm{font-size:19px}.sch-card .ty{margin-left:0}}
 </style>
 </head>
 <body>
@@ -259,6 +278,7 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
     <a class="brand" href="#top">부천 배움<b>100</b>이음</a>
     <nav aria-label="바로가기">
       <a href="#route">배움의 길</a>
+      <a href="#schools">29개 학교</a>
       <a href="#book">책자 보기</a>
       <a href="#stories">성장 이야기</a>
       <a href="#press">언론 기록</a>
@@ -305,8 +325,8 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
           <div class="dot">01</div>
           <h3>학교 안에서</h3>
           <p class="what">교육과정 특성화 · 다양한 선택과목 · 진로·학업 설계</p>
-          <div class="fact">24<small>개 고등학교</small></div>
-          <div class="fact-note">학교마다 다른 강점의 교육과정</div>
+          <div class="fact">29<small>개 고등학교</small></div>
+          <div class="fact-note">일반고·자율고 24 · 특목고 1 · 특성화고 4</div>
         </li>
         <li class="stop">
           <div class="art"><img src="assets/img/route2.png" alt="" loading="lazy"></div>
@@ -333,6 +353,27 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
           <div class="fact-note">나눔캠퍼스 참여 대학</div>
         </li>
       </ol>
+    </div>
+  </section>
+
+  <section id="schools" class="alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Bucheon 29 Schools</div>
+          <h2>29개 학교, 29개의 빛깔</h2>
+          <p class="lead">부천의 29개 고등학교는 저마다의 강점을 살린 교육과정으로 학생의 선택과 배움의 폭을 넓혀 가고 있습니다.</p>
+        </div>
+      </div>
+      <div class="sch-sum">
+        <div style="--c:var(--blue)"><b>24</b>교<span>일반고·자율고<br>교과특성화·중점 교육과정</span></div>
+        <div style="--c:#8a5cc8"><b>1</b>교<span>특수목적고<br>예술 전문 교육</span></div>
+        <div style="--c:#e08a1e"><b>4</b>교<span>특성화고<br>산업 맞춤 직업 교육</span></div>
+      </div>
+      <div class="sch-filter" role="group" aria-label="학교 유형 고르기" id="schF"></div>
+      <p class="sch-legend"><span><i style="background:var(--blue)"></i>교과특성화학교(운영 과목)</span><span><i style="background:#5cc4a0"></i>중점학교 등 교육과정 특성화</span><span><i style="background:#8a5cc8"></i>특수목적고</span><span><i style="background:#e08a1e"></i>특성화고</span></p>
+      <ul class="sch-grid" id="schG"></ul>
+      <p class="fact-note" style="margin-top:14px">※ 교과특성화학교: 지정 후 3년 운영 · 학교별 자세한 교육활동은 <a href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener">고등학교 교육활동 모아보기(e북)</a>에서 볼 수 있습니다.</p>
     </div>
   </section>
 
@@ -505,6 +546,53 @@ const DOCS = [
 /* ---------- 이하 화면 구성 ---------- */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* ---------- 29개 학교 ---------- */
+const SCHOOLS = [
+  // g: 일반고·자율고 / 특목고 / 특성화고 · b: 교과특성화(파랑) · c: 중점 등(초록)
+  { n:"계남고", y:2024, g:"g", b:["미래 사회 글로벌 창의 융합"] },
+  { n:"덕산고", y:2024, g:"g", b:["국제융합"] },
+  { n:"도당고", g:"g", c:["과학중점고"] },
+  { n:"범박고", y:2024, g:"g", b:["일본어"] },
+  { n:"부명고", y:2024, g:"g", b:["정보융합"], c:["예술중점학교(미술)"] },
+  { n:"부천고", y:2024, g:"g", c:["과학중점고"] },
+  { n:"부천북고", y:2024, g:"g", b:["국제화"] },
+  { n:"부천여고", g:"g", c:["과학중점고"] },
+  { n:"상동고", y:2025, g:"g", b:["AI 정보기반 창의융합"] },
+  { n:"상원고", y:2024, g:"g", b:["AI 융합(2024: 스페인어)"] },
+  { n:"상일고", y:2024, g:"g", b:["국제화"] },
+  { n:"소사고", y:2024, g:"g", b:["인문학 융합"] },
+  { n:"송내고", y:2025, g:"g", b:["AI / 지속가능발전교육(2024: 지속가능발전교육)"], c:["AI중점고"] },
+  { n:"수주고", y:2024, g:"g", b:["지역생태융합"] },
+  { n:"심원고", y:2024, g:"g", b:["문화콘텐츠 / 국제화"] },
+  { n:"역곡고", y:2024, g:"g", b:["국제화"] },
+  { n:"옥길새길고", g:"g", c:["과학·정보 융합 중점 특성화"] },
+  { n:"원미고", g:"g", c:["과학중점고, AI중점고"] },
+  { n:"원종고", y:2024, g:"g", b:["미래 사회 글로벌 창의 융합(2024: 사회)"], c:["체육교육과정 중점학교(고3)"] },
+  { n:"중원고", g:"g", c:["과학중점고"] },
+  { n:"중흥고", y:2024, g:"g", b:["국제화"] },
+  { n:"소명여고", y:2024, g:"g", b:["국제화"] },
+  { n:"시온고", y:2026, g:"g", b:["미래 사회 글로벌 창의 융합"], c:["예술중점학교(공연예술)","체육교육과정 중점학교(고3)"] },
+  { n:"정명고", g:"g", c:["과학중점고"] },
+  { n:"경기예술고", g:"s", d:["예술 분야 전문 교육과정"] },
+  { n:"경기경영고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"경기국제통상고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"부천공업고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"부천정보산업고", g:"v", d:["산업 수요 맞춤 직업 교육"] }
+];
+const SG = { all:["전체",""], g:["일반고·자율고","var(--blue)"], s:["특목고","#8a5cc8"], v:["특성화고","#e08a1e"] };
+function drawSchools(f){
+  $("#schF").innerHTML = Object.keys(SG).map(k=>`<button type="button" data-g="${k}" aria-pressed="${k===f}">${SG[k][0]}<b>${k==="all"?SCHOOLS.length:SCHOOLS.filter(x=>x.g===k).length}</b></button>`).join("");
+  $("#schG").innerHTML = SCHOOLS.filter(x=>f==="all"||x.g===f).slice().sort((a,b)=>a.n.localeCompare(b.n,"ko")).map(x=>{
+    const col = SG[x.g][1];
+    const tags = (x.b||[]).map(t=>`<div class="tag"><i style="background:var(--blue)"></i>${esc(t)}</div>`).join("")
+      + (x.c||[]).map(t=>`<div class="tag"><i style="background:#5cc4a0"></i>${esc(t)}</div>`).join("")
+      + (x.d||[]).map(t=>`<div class="tag"><i style="background:${col}"></i>${esc(t)}</div>`).join("");
+    return `<li class="sch-card" style="--c:${col}"><div class="hd"><span class="nm">${esc(x.n)}</span>${x.y?`<span class="yr">${x.y} 지정</span>`:""}<span class="ty">${SG[x.g][0]}</span></div>${tags}</li>`;
+  }).join("");
+}
+document.getElementById("schF").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) drawSchools(b.dataset.g); });
+drawSchools("all");
+
 let cur = 0;
 
 const thumbs = $("#thumbs");
