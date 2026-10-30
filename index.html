@@ -252,6 +252,11 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 /* 29개 학교 */
+.moa{display:flex;align-items:center;gap:16px;margin:0 0 20px;padding:18px 22px;border-radius:var(--r);background:var(--deep);color:#fff;text-decoration:none;box-shadow:0 12px 30px -16px rgba(15,58,115,.6)}
+.moa .mi{font-size:34px}.moa .mt{flex:1;display:flex;flex-direction:column;gap:4px}.moa b{font-family:var(--display);font-weight:400;font-size:26px;color:#fff}.moa small{font-size:15px;color:#cfe0f2}
+.moa .ma{font-weight:800;font-size:16px;background:#ffe28a;color:var(--deep);border-radius:999px;padding:10px 18px;white-space:nowrap}
+@media (max-width:520px){.moa{flex-wrap:wrap}.moa b{font-size:21px}.moa .ma{width:100%;text-align:center}}
+
 .sch-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
 .sch-filter button{font:inherit;font-weight:700;font-size:16px;padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
 .sch-filter button b{font-family:var(--display);font-weight:400;color:var(--blue);margin-left:4px}
@@ -371,10 +376,11 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
         <div style="--c:#8a5cc8"><b>1</b>교<span>특수목적고<br>예술 전문 교육</span></div>
         <div style="--c:#e08a1e"><b>4</b>교<span>특성화고<br>산업 맞춤 직업 교육</span></div>
       </div>
+      <a class="moa" href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener"><span class="mi">📖</span><span class="mt"><b>29개 학교의 교육활동을 한 권에</b><small>「고등학교 교육활동 모아보기」 e북 · 부천 29개 고등학교가 모두 담겨 있어요</small></span><span class="ma">e북 보기 →</span></a>
       <div class="sch-filter" role="group" aria-label="학교 유형 고르기" id="schF"></div>
       <p class="sch-legend"><span><i style="background:var(--blue)"></i>교과특성화학교(운영 과목)</span><span><i style="background:#5cc4a0"></i>중점학교 등 교육과정 특성화</span><span><i style="background:#8a5cc8"></i>특수목적고</span><span><i style="background:#e08a1e"></i>특성화고</span></p>
       <ul class="sch-grid" id="schG"></ul>
-      <p class="fact-note" style="margin-top:14px">※ 교과특성화학교: 지정 후 3년 운영 · 일반고·자율고 24교의 교육활동은 <a href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener">고등학교 교육활동 모아보기(e북)</a>에서, 특목고·특성화고는 학교 홈페이지에서 볼 수 있습니다.</p>
+      <p class="fact-note" style="margin-top:14px">※ 교과특성화학교: 지정 후 3년 운영 · 29개 학교의 교육활동은 위 <a href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener">고등학교 교육활동 모아보기(e북)</a>에 모두 담겨 있습니다.</p>
     </div>
   </section>
 
@@ -590,7 +596,7 @@ function drawSchools(f){
     const tags = (x.b||[]).map(t=>`<div class="tag"><i style="background:var(--blue)"></i>${esc(t)}</div>`).join("")
       + (x.c||[]).map(t=>`<div class="tag"><i style="background:#5cc4a0"></i>${esc(t)}</div>`).join("")
       + (x.d||[]).map(t=>`<div class="tag"><i style="background:${col}"></i>${esc(t)}</div>`).join("");
-    const go = x.url ? `<a class="go" href="${x.url}" target="_blank" rel="noopener">학교 홈페이지 →</a>` : `<a class="go" href="${MOA}" target="_blank" rel="noopener">교육활동 모아보기 →</a>`;
+    const go = x.url ? `<a class="go" href="${x.url}" target="_blank" rel="noopener">학교 홈페이지 →</a>` : "";
     return `<li class="sch-card" style="--c:${col}"><div class="hd"><span class="nm">${esc(x.n)}</span>${x.y?`<span class="yr">${x.y} 지정</span>`:""}<span class="ty">${SG[x.g][0]}</span></div>${tags}${go}</li>`;
   }).join("");
 }
