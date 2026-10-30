@@ -205,6 +205,7 @@ section{padding-block:64px}
 .press .main-rec .cat{background:var(--green);color:#fff}
 .read{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-weight:700;font-size:15px;padding:9px 16px;border-radius:999px;text-decoration:none;background:var(--deep);color:#fff}
 .read:hover{background:var(--blue)}
+.press .act{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .read.off{background:var(--soft);color:var(--muted);pointer-events:none}
 
 /* 자료 */
@@ -529,15 +530,15 @@ const STORIES = [
 
 const PRESS = [
   { date:"2026. 4. 16.", cat:"지역 연계", title:"고교학점제 안착 위한 ‘부천교육협의회’ 본격 추진", desc:"부천시·지역 5개 대학과 협력체계를 구축하고, 나눔캠퍼스 전문가 특강으로 진로·학업 설계와 학습 경험을 확대", url:"" },
-  { date:"2026. 5. 18.", cat:"교원 역량", title:"고교 교원 교육과정 역량 강화 직무연수 운영", desc:"진로·학업설계, 성취평가, 교육과정 편성, 계절제 공동교육과정까지 고교 교육과정 전반을 실제 사례 중심으로 지원", url:"" },
-  { date:"2026. 5. 26.", cat:"평가 혁신", title:"AI 서·논술형 평가 연수로 중등 교사 역량 강화", desc:"AI 서·논술형 평가와 루브릭 설계·채점·피드백을 직접 실습하며 학생 성장 중심 수업·평가 연계 역량 강화", url:"" },
+  { date:"2026. 5. 18.", cat:"교원 역량", title:"고교 교원 교육과정 역량 강화 직무연수 운영", desc:"진로·학업설계, 성취평가, 교육과정 편성, 계절제 공동교육과정까지 고교 교육과정 전반을 실제 사례 중심으로 지원", links:[{m:"경기매일",u:"https://www.kgmail.kr/news/articleView.html?idxno=621170"}] },
+  { date:"2026. 5. 26.", cat:"평가 혁신", title:"AI 서·논술형 평가 연수로 중등 교사 역량 강화", desc:"AI 서·논술형 평가와 루브릭 설계·채점·피드백을 직접 실습하며 학생 성장 중심 수업·평가 연계 역량 강화", links:[{m:"경기매일",u:"https://www.kgmail.kr/news/articleView.html?idxno=622201"}] },
   { date:"2026. 6. 1.",  cat:"사례 발굴", title:"‘고교학점제 성장 STORY 프로젝트’ 추진", desc:"학생·교사·학부모가 경험한 선택과 성장 이야기를 발굴·공유하여 학생 선택 중심 교육과정의 가치를 확산", url:"" },
   { date:"2026. 6. 25.", cat:"교육과정", title:"학교 간 상호 컨설팅으로 학생 선택 중심 교육과정 설계", desc:"학교 간 상호 컨설팅과 사례 공유로 학생 선택 중심 교육과정을 함께 설계하고, 현장의 운영 역량 강화", url:"" },
   { date:"2026. 7. 6.",  cat:"학부모 소통", title:"‘부천 고교학점제 미래공감 학부모 설명회’ 개최", desc:"학생·학부모 300여 명과 공동교육과정·교육특성화·계절학기 등 운영 사례와 2028 대입 변화를 함께 살펴보고 소통", url:"" },
   { date:"2026. 7. 22.", cat:"공동교육과정", title:"경기도 최초 ‘부천형 공동교육과정 계절학기’ 운영", desc:"학교에서 개설하기 어려운 과목을 방학까지 확장해 이수 기회를 보장하고, 여름방학 계절학기의 새로운 모델 운영", url:"" },
   { date:"2026. 8. 21.", cat:"대표기사", main:true, title:"학교 간 울타리 넘어 교육 잇는다… 부천형 공동교육과정 ‘눈길’", desc:"경기신문 · 학생 수요를 바탕으로 학교 간 교육과정을 공유하고 정규학기를 넘어 방학까지 과목 선택·이수 기회를 확대한 부천형 모델 집중 조명", url:"" },
   { date:"2026. 8. 24.", cat:"교원 역량", title:"「배움:성장」 교원 역량 강화 프로젝트 운영", desc:"교육과정·수업·평가 연수를 하나의 성장 과정으로 연결하고, 전문적 배움과 현장 실천 사례 나눔으로 교원 지원", url:"" },
-  { date:"2026. 9. 4.",  cat:"교원 역량", title:"「배움:성장」 기조강연 ‘AI 공존의 시대, 교육과정·수업·평가의 방향’ 운영", desc:"김수환 총신대학교 교수와 AI 공존 시대 교육의 방향을 살피고, 사전 질문과 현장 질의응답으로 교원의 고민을 함께 나누는 참여형 연수 운영", url:"https://www.sidaeilbo.co.kr/1252148" },
+  { date:"2026. 9. 4.",  cat:"교원 역량", title:"「배움:성장」 기조강연 ‘AI 공존의 시대, 교육과정·수업·평가의 방향’ 운영", desc:"김수환 총신대학교 교수와 AI 공존 시대 교육의 방향을 살피고, 사전 질문과 현장 질의응답으로 교원의 고민을 함께 나누는 참여형 연수 운영", links:[{m:"시대일보",u:"https://www.sidaeilbo.co.kr/1252148"}] },
   { date:"2026. 9. 17.", cat:"평가 혁신", title:"「배움:성장」 서·논술형 평가 직무연수 운영", desc:"평가의 이해에서 문항 제작, 교과별 실습으로 이어지는 단계적 연수로 교원의 평가 전문성과 실천 역량 강화", url:"" },
   { date:"2026. 10. 16.", cat:"평가 혁신", title:"부천교육지원청, ‘서·논술형 평가 연수’로 교원의 배움을 교실의 실천으로", desc:"교원 간 사례 나눔과 성찰을 통해 학생의 ‘생각하는 힘’을 키우는 평가 실천 지원", url:"" },
   { date:"2026. 10. 19.", cat:"학부모 소통", title:"부천교육지원청, 초·중·고 학부모 맞춤형 ‘고교학점제 미래공감 ON 설명회’ 운영", desc:"학교급별 고교학점제 이해와 자녀의 진로·학업 설계 지원", url:"" },
@@ -679,8 +680,8 @@ $("#pressList").innerHTML = PRESS.map((r,i) =>
        <div class="ttl">${esc(r.title)}</div>
        <div class="dsc">${esc(r.desc)}</div>
      </div>
-     <div class="act">${r.url
-       ? `<a class="read" href="${esc(r.url)}" target="_blank" rel="noopener">기사 보기 <span class="ico">open_in_new</span></a>`
+     <div class="act">${(r.links && r.links.length)
+       ? r.links.map(l => `<a class="read" href="${esc(l.u)}" target="_blank" rel="noopener">${esc(l.m)} <span class="ico">open_in_new</span></a>`).join("")
        : `<span class="read off">링크 준비 중</span>`}</div>
    </li>`).join("");
 
