@@ -265,6 +265,7 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
 .sch-card .yr{font-size:13px;color:var(--muted)}
 .sch-card .ty{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--c,var(--blue));white-space:nowrap}
 .sch-card .tag{font-size:15px;line-height:1.5}
+.sch-card .go{margin-top:auto;align-self:flex-start;font-size:14px;font-weight:700;color:var(--c,var(--blue));text-decoration:none;border-bottom:1.5px solid currentColor;padding-top:4px}
 .sch-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 22px}
 .sch-sum div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;border-left:6px solid var(--c)}
 .sch-sum b{font-family:var(--display);font-weight:400;font-size:34px;color:var(--c)}.sch-sum span{display:block;font-size:15px;color:var(--muted)}
@@ -373,7 +374,7 @@ footer strong{font-family:var(--display);font-weight:400;font-size:20px;color:#f
       <div class="sch-filter" role="group" aria-label="학교 유형 고르기" id="schF"></div>
       <p class="sch-legend"><span><i style="background:var(--blue)"></i>교과특성화학교(운영 과목)</span><span><i style="background:#5cc4a0"></i>중점학교 등 교육과정 특성화</span><span><i style="background:#8a5cc8"></i>특수목적고</span><span><i style="background:#e08a1e"></i>특성화고</span></p>
       <ul class="sch-grid" id="schG"></ul>
-      <p class="fact-note" style="margin-top:14px">※ 교과특성화학교: 지정 후 3년 운영 · 학교별 자세한 교육활동은 <a href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener">고등학교 교육활동 모아보기(e북)</a>에서 볼 수 있습니다.</p>
+      <p class="fact-note" style="margin-top:14px">※ 교과특성화학교: 지정 후 3년 운영 · 일반고·자율고 24교의 교육활동은 <a href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener">고등학교 교육활동 모아보기(e북)</a>에서, 특목고·특성화고는 학교 홈페이지에서 볼 수 있습니다.</p>
     </div>
   </section>
 
@@ -574,12 +575,13 @@ const SCHOOLS = [
   { n:"소명여고", y:2024, g:"g", b:["국제화"] },
   { n:"시온고", y:2026, g:"g", b:["미래 사회 글로벌 창의 융합"], c:["예술중점학교(공연예술)","체육교육과정 중점학교(고3)"] },
   { n:"정명고", g:"g", c:["과학중점고"] },
-  { n:"경기예술고", g:"s", d:["예술 분야 전문 교육과정"] },
-  { n:"경기경영고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
-  { n:"경기국제통상고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
-  { n:"부천공업고", g:"v", d:["산업 수요 맞춤 직업 교육"] },
-  { n:"부천정보산업고", g:"v", d:["산업 수요 맞춤 직업 교육"] }
+  { n:"경기예술고", url:"https://ggart-h.goebc.kr/", g:"s", d:["예술 분야 전문 교육과정"] },
+  { n:"경기경영고", url:"https://gm-h.goebc.kr", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"경기국제통상고", url:"https://git-h.goebc.kr", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"부천공업고", url:"https://bukong-h.goebc.kr/bukong-h/main.do", g:"v", d:["산업 수요 맞춤 직업 교육"] },
+  { n:"부천정보산업고", url:"https://ibucheon-h.goebc.kr", g:"v", d:["산업 수요 맞춤 직업 교육"] }
 ];
+const MOA = "https://koreaprint.co.kr/ebook/bucheon2026/";
 const SG = { all:["전체",""], g:["일반고·자율고","var(--blue)"], s:["특목고","#8a5cc8"], v:["특성화고","#e08a1e"] };
 function drawSchools(f){
   $("#schF").innerHTML = Object.keys(SG).map(k=>`<button type="button" data-g="${k}" aria-pressed="${k===f}">${SG[k][0]}<b>${k==="all"?SCHOOLS.length:SCHOOLS.filter(x=>x.g===k).length}</b></button>`).join("");
@@ -588,7 +590,8 @@ function drawSchools(f){
     const tags = (x.b||[]).map(t=>`<div class="tag"><i style="background:var(--blue)"></i>${esc(t)}</div>`).join("")
       + (x.c||[]).map(t=>`<div class="tag"><i style="background:#5cc4a0"></i>${esc(t)}</div>`).join("")
       + (x.d||[]).map(t=>`<div class="tag"><i style="background:${col}"></i>${esc(t)}</div>`).join("");
-    return `<li class="sch-card" style="--c:${col}"><div class="hd"><span class="nm">${esc(x.n)}</span>${x.y?`<span class="yr">${x.y} 지정</span>`:""}<span class="ty">${SG[x.g][0]}</span></div>${tags}</li>`;
+    const go = x.url ? `<a class="go" href="${x.url}" target="_blank" rel="noopener">학교 홈페이지 →</a>` : `<a class="go" href="${MOA}" target="_blank" rel="noopener">교육활동 모아보기 →</a>`;
+    return `<li class="sch-card" style="--c:${col}"><div class="hd"><span class="nm">${esc(x.n)}</span>${x.y?`<span class="yr">${x.y} 지정</span>`:""}<span class="ty">${SG[x.g][0]}</span></div>${tags}${go}</li>`;
   }).join("");
 }
 document.getElementById("schF").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) drawSchools(b.dataset.g); });
