@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>100개의 이음을 모아 주세요 · 부천 배움100이음 직원 이벤트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Pen+Script&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --ink:#14233d; --muted:#5a6b82; --paper:#f7f9fb; --card:#ffffff; --line:#dde5ee;
+  --blue:#1f6fc6; --teal:#2a9bb0; --green:#3fa86b; --deep:#0f3a73; --soft:#eaf3fb; --gold:#ffe28a;
+  --grad:linear-gradient(90deg,var(--blue),var(--teal) 55%,var(--green));
+  --display:"Black Han Sans","Pretendard",system-ui,sans-serif;
+  --body:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --hand:"Nanum Pen Script",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e6edf6;--muted:#9fb0c5;--paper:#0e1724;--card:#152234;--line:#25364d;--blue:#5aa2ec;--teal:#4cc0d2;--green:#6cc792;--deep:#0b2a52;--soft:#16304d;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#e6edf6;--muted:#9fb0c5;--paper:#0e1724;--card:#152234;--line:#25364d;--blue:#5aa2ec;--teal:#4cc0d2;--green:#6cc792;--deep:#0b2a52;--soft:#16304d;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%}
+a{color:var(--blue)}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+header.top{background:var(--card);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;min-height:58px}
+header.top img{height:26px}
+header.top b{font-family:var(--display);font-weight:400;font-size:20px}
+header.top .tag{margin-left:auto;font-size:13px;font-weight:700;color:var(--deep);background:var(--soft);padding:4px 12px;border-radius:999px}
+.hero{padding:44px 0 28px;position:relative}
+.hero .eb{font-weight:800;color:var(--muted);font-size:15px;letter-spacing:.02em}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,7vw,64px);line-height:1.12;margin:10px 0 14px}
+.hero p.lead{font-size:19px;margin:0 0 6px;max-width:680px}
+.hero .hand{font-family:var(--hand);font-size:32px;color:var(--teal);margin:8px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+.facts span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px}
+.meter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 22px;margin:26px 0 0}
+.meter .row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.meter .n{font-family:var(--display);font-size:52px;line-height:1;color:var(--blue)}
+.meter .of{font-family:var(--display);font-size:26px;color:var(--muted)}
+.meter .msg{margin-left:auto;font-weight:700;color:var(--muted)}
+.bar{height:16px;border-radius:999px;background:var(--soft);overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:var(--grad);border-radius:999px;transition:width 1s ease}
+section{padding:26px 0}
+h2{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.2;margin:0 0 14px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px;border-top:6px solid var(--c)}
+.step .no{font-weight:900;color:var(--c);font-size:14px}
+.step h3{margin:0;font-size:20px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+.step .tk{align-self:flex-start;margin-top:auto;font-weight:800;font-size:14px;background:var(--gold);color:#14233d;border-radius:999px;padding:3px 12px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:800;border:0;border-radius:999px;padding:12px 22px;cursor:pointer;background:var(--deep);color:#fff;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--deep);border:2px solid var(--deep)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+form.card,.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+fieldset{border:0;margin:0 0 22px;padding:0}
+legend{font-weight:900;font-size:19px;margin-bottom:10px;padding:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+legend .tk{font-size:13px;font-weight:800;background:var(--gold);color:#14233d;border-radius:999px;padding:2px 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:15px}
+input[type=text],input[type=number],textarea{font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;width:100%}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus{outline:3px solid color-mix(in srgb,var(--blue) 35%,transparent);border-color:var(--blue)}
+.q{margin:0 0 16px}
+.q p{margin:0 0 8px;font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;background:var(--paper);font-size:15px}
+.opts input{accent-color:var(--blue)}
+.opts label:has(input:checked){border-color:var(--blue);background:var(--soft);font-weight:800}
+.hint{font-size:14px;color:var(--muted);margin:4px 0 0}
+.kinds{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.kinds label{border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;font-size:15px;background:var(--paper)}
+.kinds input{position:absolute;opacity:0;pointer-events:none}
+.kinds label:has(input:checked){border-color:var(--k);background:color-mix(in srgb,var(--k) 14%,var(--card));font-weight:800}
+.count{text-align:right;font-size:13px;color:var(--muted)}
+.privacy{font-size:14px;color:var(--muted);background:var(--soft);border-radius:12px;padding:10px 14px;margin:0 0 16px}
+.err{color:#c0392b;font-weight:700;margin:10px 0 0;min-height:1.4em}
+.result{display:none;text-align:center;border:3px solid var(--blue);border-radius:24px;padding:26px 18px;background:var(--card)}
+.result.on{display:block}
+.result .code{font-family:var(--display);font-size:56px;letter-spacing:.04em;margin:6px 0}
+.result .tks{font-family:var(--display);font-size:30px;color:var(--green)}
+.result ul{list-style:none;padding:0;margin:12px 0 0;color:var(--muted)}
+.wall{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.note{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--k);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.note .kd{font-size:13px;font-weight:800;color:var(--k)}
+.note .tx{font-family:var(--hand);font-size:26px;line-height:1.25;word-break:keep-all;overflow-wrap:anywhere}
+.note .by{margin-top:auto;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.note.mine{box-shadow:0 0 0 3px var(--gold)}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.demo{display:inline-block;font-size:12px;font-weight:800;background:#c0392b;color:#fff;border-radius:6px;padding:2px 8px;margin-right:8px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:20px}
+/* 추첨 무대 */
+#stage{display:none;position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
+#stage.on{display:flex}
+#stage .t{font-family:var(--display);font-size:clamp(30px,5vw,54px)}
+#stage .big{font-family:var(--display);font-size:clamp(70px,14vw,170px);line-height:1;letter-spacing:.04em;color:var(--gold);min-height:1em}
+#stage .who{font-size:clamp(22px,3.4vw,36px);font-weight:800;min-height:1.4em}
+#stage .meta{opacity:.75}
+#stage .wins{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:1100px}
+#stage .wins span{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 14px;font-weight:700}
+#stage .ctl{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#stage .btn{background:var(--gold);color:#14233d;font-size:20px}
+#stage .btn.ghost{background:transparent;color:#fff;border-color:#fff}
+header.top b{white-space:nowrap}
+@media (max-width:760px){header.top .tag{display:none}.steps,.wall{grid-template-columns:1fr}.two{grid-template-columns:1fr}.meter .msg{margin-left:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <img src="assets/img/logo100.png" alt="">
+  <b>부천 배움 100이음</b>
+  <span class="tag">교육지원청 직원 이벤트</span>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <div class="eb">경기도부천교육지원청 직원 여러분께</div>
+    <h1><span class="gt">100개의 이음을</span><br>모아 주세요</h1>
+    <p class="lead">『부천 배움 100이음』을 둘러보고 이야기 벽에 한 줄을 남겨 주세요. 추첨으로 <b>혜림 쿠폰</b>을 드립니다.</p>
+    <p class="hand">한 줄 한 줄이 모여, 부천의 배움이 이어집니다</p>
+    <div class="facts" id="facts"></div>
+    <div class="meter" aria-live="polite">
+      <div class="row"><span class="n" id="mN">0</span><span class="of">/ 100 이음</span><span class="msg" id="mMsg"></span></div>
+      <div class="bar"><i id="mBar"></i></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>참여 방법</h2>
+    <div class="steps">
+      <div class="step" style="--c:var(--blue)"><span class="no">STEP 1</span><h3>사이트 둘러보기</h3><p>학생과 선생님의 성장 이야기, 29개 학교, 언론 기록까지 한 바퀴.</p><a class="btn ghost" href="./" target="_blank" rel="noopener">배움100이음 열기 ↗</a></div>
+      <div class="step" style="--c:var(--teal)"><span class="no">STEP 2</span><h3>퀴즈 3문항</h3><p>답은 모두 사이트에 있어요. 세 문제를 다 맞히면 추첨권이 한 장 더.</p><span class="tk">다 맞히면 +1장</span></div>
+      <div class="step" style="--c:var(--green)"><span class="no">STEP 3</span><h3>숨은 ∞ 찾기</h3><p>책자 곳곳에 숨은 ∞ 모양은 모두 몇 개일까요? 맞히면 또 한 장.</p><span class="tk">맞히면 +1장</span></div>
+    </div>
+    <p class="hint">이야기 벽에 한 줄을 남기면 추첨권 1장, 퀴즈와 ∞까지 맞히면 최대 3장입니다. 한 분당 한 번 참여할 수 있어요.</p>
+  </section>
+
+  <section id="join">
+    <h2>한 줄 남기고 참여하기</h2>
+    <form class="card" id="form" autocomplete="off">
+      <fieldset>
+        <legend>퀴즈 3문항 <span class="tk">다 맞히면 +1장</span></legend>
+        <div class="q"><p>1. 부천의 고등학교는 모두 몇 곳일까요?</p>
+          <div class="opts"><label><input type="radio" name="q1" value="24">24곳</label><label><input type="radio" name="q1" value="26">26곳</label><label><input type="radio" name="q1" value="29">29곳</label><label><input type="radio" name="q1" value="31">31곳</label></div></div>
+        <div class="q"><p>2. 2026 정규학기 부천형 공동교육과정에 참여한 학생은 몇 명일까요?</p>
+          <div class="opts"><label><input type="radio" name="q2" value="527">527명</label><label><input type="radio" name="q2" value="627">627명</label><label><input type="radio" name="q2" value="727">727명</label><label><input type="radio" name="q2" value="827">827명</label></div></div>
+        <div class="q"><p>3. 부천이 ‘경기도 최초’로 운영한 것은 무엇일까요?</p>
+          <div class="opts"><label><input type="radio" name="q3" value="박람회">고교학점제 박람회</label><label><input type="radio" name="q3" value="계절학기">공동교육과정 계절학기</label><label><input type="radio" name="q3" value="온라인학교">온라인 학교</label><label><input type="radio" name="q3" value="진로캠프">진로 캠프</label></div></div>
+        <p class="hint">힌트는 <a href="./" target="_blank" rel="noopener">배움100이음 사이트</a>에 모두 있어요. 정답은 참여한 뒤에 알려 드립니다.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>숨은 ∞ 찾기 <span class="tk">맞히면 +1장</span></legend>
+        <label class="f">『부천 배움 100이음』 책자(e북) 표지부터 마지막 쪽까지, ∞ 모양은 모두 몇 개일까요?
+          <input type="number" name="inf" min="0" max="999" inputmode="numeric" placeholder="숫자만 (선택)" style="max-width:220px"></label>
+        <p class="hint"><a href="https://m.site.naver.com/2jWn9" target="_blank" rel="noopener">e북 열기 ↗</a> · 100 로고의 두 ‘0’부터 찾아보세요. 몰라도 참여할 수 있어요.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>이야기 벽에 한 줄</legend>
+        <div class="kinds" id="kinds"></div>
+        <textarea name="text" maxlength="100" placeholder="예) 학교와 학교를 잇는 수업, 우리 부서 일도 그 다리의 한 칸이었네요." required></textarea>
+        <div class="count"><span id="cnt">0</span> / 100</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>부서와 이름</legend>
+        <div class="two">
+          <label class="f">부서 <input type="text" name="dept" maxlength="30" placeholder="예) 중등교육지원과" required></label>
+          <label class="f">이름 <input type="text" name="name" maxlength="20" placeholder="예) 홍길동" required></label>
+        </div>
+      </fieldset>
+      <p class="privacy">부서와 이름은 당첨 안내에만 쓰고, 이야기 벽에는 ‘중등교육지원과 홍○○’처럼 이름을 가려서 보여 드립니다. 이벤트가 끝나면 명단은 지웁니다.</p>
+      <button class="btn" type="submit" id="go">한 줄 남기고 참여하기</button>
+      <p class="err" id="err" role="alert"></p>
+    </form>
+
+    <div class="result" id="result" aria-live="polite">
+      <div>참여해 주셔서 감사합니다. 나의 행운 코드</div>
+      <div class="code" id="rCode">E-0000</div>
+      <div class="tks" id="rTk">추첨권 1장</div>
+      <ul id="rList"></ul>
+      <p class="hint" id="rDraw"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>부천 교육 이야기 벽 <span id="wStatus" style="font-family:var(--body);font-size:15px;color:var(--muted)"></span></h2>
+    <div class="wall" id="wall"></div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  경기도부천교육지원청 중등교육지원과 · 이 페이지는 교육지원청 직원 이벤트용입니다.<br>
+  <a href="./">『부천 배움 100이음』 사이트로 가기</a>
+</div></footer>
+
+<div id="stage" role="dialog" aria-label="행운 추첨">
+  <div class="t">100개의 이음 · 행운 추첨</div>
+  <div class="meta" id="sMeta"></div>
+  <div class="big" id="sBig">?</div>
+  <div class="who" id="sWho"></div>
+  <div class="ctl"><button class="btn" id="sGo">한 명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
+  <div class="wins" id="sWins"></div>
+</div>
+
+<script>
+/* ===== 운영 설정 — 여기만 고치면 됩니다 ===== */
+const CONFIG = {
+  API_URL: "",                 // 이음이벤트 Apps Script 웹 앱 주소(…/exec). 비워 두면 미리보기
+  FROM: "2026-11-04T09:00:00+09:00",   // 서버의 OPEN_FROM 과 같게
+  TO:   "2026-11-13T18:00:00+09:00",   // 서버의 OPEN_TO 와 같게
+  DRAW: "11. 16.(월)",          // 추첨 날짜 (안내용)
+  WINNERS: 10,                 // 당첨 인원
+  GOAL: 100
+};
+const KINDS = [
+  {k:"scene", n:"📖 인상 깊은 장면", c:"#1f6fc6"},
+  {k:"cheer", n:"👏 학교에 보내는 응원", c:"#3fa86b"},
+  {k:"link",  n:"🔗 우리 부서와 배움의 이음", c:"#2a9bb0"},
+  {k:"free",  n:"💬 자유롭게", c:"#8a5cc8"}
+];
+const KMAP = Object.fromEntries(KINDS.map(x=>[x.k,x]));
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const fmt = iso => { const d = new Date(iso); const w = "일월화수목금토"[d.getDay()]; return `${d.getMonth()+1}. ${d.getDate()}.(${w}) ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
+
+let data = { cards: [], count: 0 };
+const DEMO = [
+  {id:"d1", dept:"중등교육지원과", name:"김○○", kind:"scene", text:"서른두 번의 수업 끝에 가장 많이 자란 사람은 저였다는 말이 오래 남아요.", code:"E-D001", tickets:3},
+  {id:"d2", dept:"행정지원과", name:"이○○", kind:"link", text:"계절학기 강의실 예산을 맞춘 일이 학생 256명의 방학이 됐다니 뿌듯합니다.", code:"E-D002", tickets:2},
+  {id:"d3", dept:"초등교육지원과", name:"박○○", kind:"cheer", text:"29개 학교 모두 응원합니다. 선택이 성장으로!", code:"E-D003", tickets:1}
+];
+
+/* JSONP — 응답을 바로 읽기 위해 GET 으로 주고받습니다 */
+function jsonp(params){
+  return new Promise((res, rej) => {
+    const cb = "__ev" + Date.now() + Math.floor(Math.random()*1e4);
+    const sc = document.createElement("script");
+    const q = new URLSearchParams({...params, callback: cb, t: Date.now()});
+    const timer = setTimeout(() => { cleanup(); rej(new Error("timeout")); }, 15000);
+    function cleanup(){ clearTimeout(timer); delete window[cb]; sc.remove(); }
+    window[cb] = d => { cleanup(); res(d); };
+    sc.onerror = () => { cleanup(); rej(new Error("network")); };
+    sc.src = CONFIG.API_URL + (CONFIG.API_URL.includes("?") ? "&" : "?") + q.toString();
+    document.body.appendChild(sc);
+  });
+}
+
+function phase(){ const n = Date.now(); return n < new Date(CONFIG.FROM) ? "before" : n > new Date(CONFIG.TO) ? "closed" : "open"; }
+
+function drawFacts(){
+  $("#facts").innerHTML = [
+    `참여 ${fmt(CONFIG.FROM)} ~ ${fmt(CONFIG.TO)}`,
+    `추첨 ${CONFIG.DRAW}`,
+    `혜림 쿠폰 ${CONFIG.WINNERS}명`
+  ].map(t => `<span>${esc(t)}</span>`).join("");
+}
+
+function drawMeter(){
+  const n = data.count || 0, g = CONFIG.GOAL;
+  $("#mN").textContent = n;
+  $("#mBar").style.width = Math.min(100, n / g * 100) + "%";
+  $("#mMsg").textContent = n >= g ? "100개의 이음이 모였어요! 감사합니다" : `${g - n}개 남았어요`;
+}
+
+function drawWall(){
+  const mine = new Set(JSON.parse(store.get("ieum.mine") || "[]"));
+  const list = [...data.cards].sort((a,b) => (b.at||0) - (a.at||0));
+  $("#wall").innerHTML = list.length ? list.map(c => {
+    const k = KMAP[c.kind] || KMAP.free;
+    return `<article class="note${mine.has(c.code) ? " mine" : ""}" style="--k:${k.c}"><span class="kd">${esc(k.n)}</span><div class="tx">${esc(c.text)}</div><div class="by"><span>${esc(c.dept)} ${esc(c.name)}</span><span>${mine.has(c.code) ? "🎁 " : ""}${esc(c.code||"")}</span></div></article>`;
+  }).join("") : `<div class="empty">아직 첫 번째 이음을 기다리고 있어요.</div>`;
+}
+
+async function load(){
+  if (!CONFIG.API_URL){
+    data = { cards: data.cards.length ? data.cards : DEMO.map(d => ({...d, at: Date.now() - Math.random()*6e5})), count: 0 };
+    data.count = data.cards.length;
+    $("#wStatus").innerHTML = `<span class="demo">미리보기</span>서버를 연결하면 실제 글이 올라옵니다`;
+  } else {
+    try {
+      const d = await jsonp({});
+      if (d && d.ok){ data = d; $("#wStatus").textContent = ""; }
+    } catch(e){ $("#wStatus").textContent = "잠시 연결이 어렵습니다. 새로고침해 주세요."; }
+  }
+  drawMeter(); drawWall();
+  const p = phase();
+  if (p !== "open"){
+    $("#go").disabled = true;
+    $("#err").textContent = p === "before" ? `${fmt(CONFIG.FROM)}부터 참여할 수 있어요.` : "이벤트가 마감되었습니다. 참여해 주셔서 감사합니다.";
+  }
+}
+
+function setupForm(){
+  $("#kinds").innerHTML = KINDS.map((k,i) => `<label style="--k:${k.c}"><input type="radio" name="kind" value="${k.k}"${i===0?" checked":""}>${esc(k.n)}</label>`).join("");
+  const ta = $("#form").text;
+  ta.addEventListener("input", () => { $("#cnt").textContent = ta.value.length; });
+  const done = store.get("ieum.done");
+  if (done) showResult(JSON.parse(done), true);
+
+  $("#form").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const f = ev.target, err = $("#err");
+    err.textContent = "";
+    const body = {
+      action: "add", kind: f.kind.value, text: f.text.value.trim(),
+      dept: f.dept.value.trim(), name: f.name.value.trim(),
+      q1: f.q1.value || "", q2: f.q2.value || "", q3: f.q3.value || "", inf: f.inf.value || ""
+    };
+    if (!body.text){ err.textContent = "한 줄을 적어 주세요."; return; }
+    if (!body.dept || !body.name){ err.textContent = "부서와 이름을 적어 주세요."; return; }
+    if (!body.q1 || !body.q2 || !body.q3){
+      if (!confirm("퀴즈를 다 풀지 않았어요. 이대로 참여할까요? (퀴즈 추첨권은 받을 수 없어요)")) return;
+    }
+    const btn = $("#go"); btn.disabled = true; btn.textContent = "보내는 중…";
+    try {
+      let r;
+      if (!CONFIG.API_URL){
+        const id = Math.random().toString(16).slice(2,10);
+        r = { ok:true, code:"E-" + id.slice(0,4).toUpperCase(), tickets:1, quiz:null, inf:"", demo:true };
+        data.cards.push({ id, dept: body.dept, name: body.name.charAt(0) + "○○", kind: body.kind, text: body.text, code: r.code, at: Date.now() });
+        data.count = data.cards.length;
+      } else {
+        r = await jsonp(body);
+      }
+      if (!r.ok){ err.textContent = r.error || "다시 시도해 주세요."; btn.disabled = false; btn.textContent = "한 줄 남기고 참여하기"; return; }
+      const mine = JSON.parse(store.get("ieum.mine") || "[]"); mine.push(r.code); store.set("ieum.mine", JSON.stringify(mine));
+      store.set("ieum.done", JSON.stringify(r));
+      showResult(r, false);
+      await load();
+    } catch(e){
+      err.textContent = "연결이 원활하지 않아요. 잠시 뒤 다시 눌러 주세요.";
+      btn.disabled = false; btn.textContent = "한 줄 남기고 참여하기";
+    }
+  });
+}
+
+function showResult(r, again){
+  $("#form").style.display = "none";
+  $("#result").classList.add("on");
+  $("#rCode").textContent = r.code;
+  $("#rTk").textContent = `추첨권 ${r.tickets}장`;
+  const li = ["이야기 벽 한 줄 · 1장"];
+  if (r.quiz === true) li.push("퀴즈 3문항 모두 정답 · +1장");
+  else if (r.quiz === false) li.push("퀴즈는 아쉽게 다 맞히지 못했어요" + (r.answers ? ` (정답: ${r.answers})` : ""));
+  if (r.inf === true) li.push("숨은 ∞ 정답 · +1장");
+  else if (r.inf === false) li.push("숨은 ∞는 아쉽게 빗나갔어요");
+  else if (r.infPending) li.push("숨은 ∞ 답은 마감 뒤 채점해서 추첨권에 더해 드려요");
+  if (r.demo) li.push("미리보기라 실제로 저장되지 않았어요");
+  $("#rList").innerHTML = li.map(x => `<li>${esc(x)}</li>`).join("");
+  $("#rDraw").textContent = `${CONFIG.DRAW} 추첨 때 이 행운 코드가 화면에 나오면 당첨입니다. 코드를 기억해 두세요.` + (again ? " (이미 참여하셨어요)" : "");
+}
+
+/* ===== 추첨 무대: 주소 끝에 #draw ===== */
+const LK = "ieum.draw";
+function drawState(){ try{ return JSON.parse(store.get(LK)) || { picks: [] }; }catch(e){ return { picks: [] }; } }
+function saveDraw(s){ store.set(LK, JSON.stringify(s)); }
+function pool(){
+  const s = drawState(), taken = new Set(s.picks.map(p => p.code));
+  const out = [];
+  data.cards.forEach(c => { if (!taken.has(c.code)) for (let i = 0; i < (Number(c.tickets) || 1); i++) out.push(c); });
+  return out;
+}
+function renderStage(){
+  const s = drawState(), wins = s.picks.filter(p => !p.void);
+  $("#sMeta").textContent = `참여 ${data.cards.length}명 · 추첨권 ${data.cards.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
+  $("#sWins").innerHTML = wins.map((p,i) => `<span>${i+1}. ${esc(p.code)} · ${esc(p.dept)} ${esc(p.name)}</span>`).join("");
+  $("#sGo").disabled = wins.length >= CONFIG.WINNERS;
+  $("#sAgain").disabled = !s.picks.length || s.picks[s.picks.length-1].void;
+}
+function pickOne(){
+  const s = drawState();
+  if (s.picks.filter(p => !p.void).length >= CONFIG.WINNERS) return;
+  const p = pool();
+  if (!p.length){ $("#sWho").textContent = "더 뽑을 분이 없어요"; return; }
+  const big = $("#sBig"), who = $("#sWho");
+  who.textContent = ""; let n = 0;
+  const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 26){ clearInterval(spin); finish(); } }, 70);
+  function finish(){
+    const arr = new Uint32Array(1); crypto.getRandomValues(arr);
+    const w = p[arr[0] % p.length];
+    big.textContent = w.code; who.textContent = `${w.dept} ${w.name}`;
+    s.picks.push({ code: w.code, dept: w.dept, name: w.name, at: Date.now() }); saveDraw(s); renderStage();
+  }
+}
+function openStage(){ $("#stage").classList.add("on"); renderStage(); }
+$("#sGo").onclick = pickOne;
+$("#sAgain").onclick = () => { const s = drawState(); const last = s.picks[s.picks.length-1]; if (last && !last.void){ last.void = true; saveDraw(s); $("#sWho").textContent = "다시 뽑습니다"; $("#sBig").textContent = "?"; renderStage(); } };
+$("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 처음부터 할까요?")){ saveDraw({ picks: [] }); $("#sBig").textContent = "?"; $("#sWho").textContent = ""; renderStage(); } };
+$("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); };
+
+drawFacts(); setupForm();
+load().then(() => { if (location.hash === "#draw") openStage(); });
+window.addEventListener("hashchange", () => { if (location.hash === "#draw") openStage(); });
+</script>
+</body>
+</html>
