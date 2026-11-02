@@ -185,6 +185,7 @@ header.top b{white-space:nowrap}
       <div class="tks" id="rTk">추첨권 1장</div>
       <ul id="rList"></ul>
       <p class="hint" id="rDraw"></p>
+      <p class="hint"><a href="#" id="rNew">이 기기로 다른 분이 참여하기</a></p>
     </div>
   </section>
 
@@ -344,6 +345,16 @@ function setupForm(){
   });
 }
 
+document.addEventListener("click", e => {
+  if (e.target && e.target.id === "rNew"){
+    e.preventDefault();
+    try { localStorage.removeItem("ieum.done"); } catch(x){}
+    const f = $("#form"); f.reset(); $("#cnt").textContent = "0";
+    $("#result").classList.remove("on"); f.style.display = "";
+    const b = $("#go"); b.disabled = false; b.textContent = "한 줄 남기고 참여하기"; $("#err").textContent = "";
+    f.scrollIntoView({ behavior: "smooth" });
+  }
+});
 function showResult(r, again){
   $("#form").style.display = "none";
   $("#result").classList.add("on");
