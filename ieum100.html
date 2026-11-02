@@ -204,7 +204,7 @@ header.top b{white-space:nowrap}
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
   <div class="who" id="sWho"></div>
-  <div class="ctl"><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
+  <div class="ctl"><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
   <div class="wins" id="sWins"></div>
 </div>
 
@@ -398,6 +398,13 @@ function openStage(){ $("#stage").classList.add("on"); renderStage(); }
 $("#sGo").onclick = () => pickOne();
 $("#sGo5").onclick = async () => { const b = $("#sGo5"); b.disabled = true; for (let i = 0; i < 5; i++){ await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); } b.disabled = false; renderStage(); };
 $("#sAgain").onclick = () => { const s = drawState(); const last = s.picks[s.picks.length-1]; if (last && !last.void){ last.void = true; saveDraw(s); $("#sWho").textContent = "다시 뽑습니다"; $("#sBig").textContent = "?"; renderStage(); } };
+$("#sCopy").onclick = async () => {
+  const wins = drawState().picks.filter(p => !p.void);
+  const txt = "[부천 배움 100이음 · 행운 추첨 결과] " + CONFIG.DRAW + "\n" + wins.map((p,i) => `${i+1}\t${p.code}\t${p.dept}\t${p.name}`).join("\n");
+  try { await navigator.clipboard.writeText(txt); $("#sCopy").textContent = "복사했어요 ✓"; }
+  catch(e){ prompt("아래 내용을 복사해 주세요", txt); }
+  setTimeout(() => { $("#sCopy").textContent = "결과 복사"; }, 2000);
+};
 $("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 처음부터 할까요?")){ saveDraw({ picks: [] }); $("#sBig").textContent = "?"; $("#sWho").textContent = ""; renderStage(); } };
 $("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); };
 
