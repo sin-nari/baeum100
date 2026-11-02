@@ -132,9 +132,9 @@ header.top b{white-space:nowrap}
     <h2>참여 방법</h2>
     <div class="steps">
       <div class="step" style="--c:var(--blue)"><span class="no">STEP 1</span><h3>책 펼치기</h3><p>『부천 배움 100이음』 e북과 사이트를 펼쳐 두세요. 답은 모두 책 속에 있어요.</p><a class="btn ghost" href="https://m.site.naver.com/2jWn9" target="_blank" rel="noopener">e북 열기 ↗</a></div>
-      <div class="step" style="--c:var(--teal)"><span class="no">STEP 2</span><h3>책 속 퀴즈 6문항</h3><p>첫 문제는 숨은 ∞ 찾기! 책장을 넘기며 찾아보세요. 여섯 문제를 다 맞히면 추첨권이 한 장 더.</p><span class="tk">다 맞히면 +1장</span></div>
-      <div class="step" style="--c:var(--green)"><span class="no">STEP 3</span><h3>이야기 벽에 한 줄</h3><p>인상 깊은 장면, 학교에 보내는 응원, 우리 부서와 배움의 이음까지 무엇이든.</p><span class="tk">추첨권 1장</span></div>
-    <p class="hint">이야기 벽에 한 줄을 남기면 추첨권 1장, 책 속 퀴즈 6문항을 다 맞히면 1장 더해 모두 2장입니다. 한 분당 한 번 참여할 수 있어요.</p>
+      <div class="step" style="--c:var(--teal)"><span class="no">STEP 2</span><h3>책 속 퀴즈 6문항</h3><p>첫 문제는 숨은 ∞ 찾기! 책장을 넘기며 여섯 문제를 모두 풀어 주세요. 다 맞히면 추첨권이 한 장 더.</p><span class="tk">모두 풀기 · 다 맞히면 +1장</span></div>
+      <div class="step" style="--c:var(--green)"><span class="no">STEP 3</span><h3>이야기 벽에 한 줄</h3><p>인상 깊은 장면, 학교에 보내는 응원, 우리 부서와 배움의 이음까지 무엇이든.</p><span class="tk">퀴즈 + 한 줄 = 추첨권 1장</span></div>
+    <p class="hint">퀴즈 6문항을 풀고 이야기 벽에 한 줄까지 남기면 참여 완료, 추첨권 1장입니다. 퀴즈를 모두 맞히면 1장을 더해 2장! 한 분당 한 번 참여할 수 있어요.</p>
   </section>
 
   <section id="join">
@@ -319,7 +319,7 @@ function setupForm(){
     if (!body.text){ err.textContent = "한 줄을 적어 주세요."; return; }
     if (!body.dept || !body.name){ err.textContent = "부서와 이름을 적어 주세요."; return; }
     if (!body.q1 || !body.q2 || !body.q3 || !body.q4 || !body.q5 || !body.q6){
-      if (!confirm("퀴즈를 다 풀지 않았어요. 이대로 참여할까요? (퀴즈 추첨권은 받을 수 없어요)")) return;
+      err.textContent = "퀴즈 6문항을 모두 풀어 주세요. 퀴즈와 한 줄을 모두 남겨야 참여가 됩니다."; return;
     }
     const btn = $("#go"); btn.disabled = true; btn.textContent = "보내는 중…";
     try {
@@ -349,7 +349,7 @@ function showResult(r, again){
   $("#result").classList.add("on");
   $("#rCode").textContent = r.code;
   $("#rTk").textContent = `추첨권 ${r.tickets}장`;
-  const li = ["이야기 벽 한 줄 · 1장"];
+  const li = ["퀴즈 풀기 + 이야기 벽 한 줄 · 1장"];
   if (r.quiz === true) li.push("퀴즈 6문항 모두 정답 · +1장");
   else if (r.quiz === false) li.push("퀴즈는 아쉽게 다 맞히지 못했어요" + (r.answers ? ` (정답: ${r.answers})` : ""));
   if (r.inf === true) li.push("숨은 ∞ 정답 · +1장");
