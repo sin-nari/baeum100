@@ -132,16 +132,16 @@ header.top b{white-space:nowrap}
     <h2>참여 방법</h2>
     <div class="steps">
       <div class="step" style="--c:var(--blue)"><span class="no">STEP 1</span><h3>책 펼치기</h3><p>『부천 배움 100이음』 e북과 사이트를 펼쳐 두세요. 답은 모두 책 속에 있어요.</p><a class="btn ghost" href="https://m.site.naver.com/2jWn9" target="_blank" rel="noopener">e북 열기 ↗</a></div>
-      <div class="step" style="--c:var(--teal)"><span class="no">STEP 2</span><h3>책 속 퀴즈 6문항</h3><p>첫 문제는 숨은 ∞ 찾기! 책장을 넘기며 여섯 문제를 모두 풀어 주세요. 다 맞히면 추첨권이 한 장 더.</p><span class="tk">모두 풀기 · 다 맞히면 +1장</span></div>
-      <div class="step" style="--c:var(--green)"><span class="no">STEP 3</span><h3>이야기 벽에 한 줄</h3><p>인상 깊은 장면, 학교에 보내는 응원, 우리 부서와 배움의 이음까지 무엇이든.</p><span class="tk">퀴즈 + 한 줄 = 추첨권 1장</span></div>
-    <p class="hint">퀴즈 6문항을 풀고 이야기 벽에 한 줄까지 남기면 참여 완료, 추첨권 1장입니다. 퀴즈를 모두 맞히면 1장을 더해 2장! 한 분당 한 번 참여할 수 있어요.</p>
+      <div class="step" style="--c:var(--teal)"><span class="no">STEP 2</span><h3>책 속 퀴즈 6문항</h3><p>첫 문제는 숨은 ∞ 찾기! 책장을 넘기며 여섯 문제를 모두 풀어 주세요.</p></div>
+      <div class="step" style="--c:var(--green)"><span class="no">STEP 3</span><h3>이야기 벽에 한 줄</h3><p>인상 깊은 장면, 학교에 보내는 응원, 우리 부서와 배움의 이음까지 무엇이든.</p></div>
+    <p class="hint">1 → 2 → 3 순서대로, 퀴즈 6문항을 풀고 이야기 벽에 한 줄까지 남기면 참여 완료! 한 분당 추첨권 1장입니다.</p>
   </section>
 
   <section id="join">
     <h2>한 줄 남기고 참여하기</h2>
     <form class="card" id="form" autocomplete="off">
       <fieldset>
-        <legend>책 속 퀴즈 6문항 <span class="tk">다 맞히면 +1장</span></legend>
+        <legend>책 속 퀴즈 6문항</legend>
         <div class="q"><p>1. 『부천 배움 100이음』 책자(e북) 표지부터 뒤표지까지, ∞ 모양은 모두 몇 번 나올까요?</p>
           <div class="opts"><label><input type="radio" name="q1" value="6">6번</label><label><input type="radio" name="q1" value="8">8번</label><label><input type="radio" name="q1" value="10">10번</label><label><input type="radio" name="q1" value="12">12번</label></div>
           <p class="hint"><a href="https://m.site.naver.com/2jWn9" target="_blank" rel="noopener">e북 열기 ↗</a> · 표지의 100 로고, 두 ‘0’이 이어진 모양부터 찾아보세요.</p></div>
@@ -216,7 +216,7 @@ const CONFIG = {
   FROM: "2026-11-02T16:00:00+09:00",   // 서버의 OPEN_FROM 과 같게
   TO:   "2026-11-11T23:59:59+09:00",   // 서버의 OPEN_TO 와 같게
   PERIOD: "11. 5.(목) ~ 11. 11.(수)",   // 화면에 안내하는 참여 기간
-  DRAW: "11. 13.(금) 15:00 Zoom 실시간 추첨",   // 추첨 안내
+  DRAW: "11. 13.(금) 14:00 Zoom 실시간 추첨",   // 추첨 안내
   PRIZE: "혜림 커피 쿠폰",
   WINNERS: 30,                 // 당첨 인원
   GOAL: 100
@@ -236,8 +236,8 @@ const fmt = iso => { const d = new Date(iso); const w = "일월화수목금토"[
 
 let data = { cards: [], count: 0 };
 const DEMO = [
-  {id:"d1", dept:"중등교육지원과", name:"김○○", kind:"scene", text:"서른두 번의 수업 끝에 가장 많이 자란 사람은 저였다는 말이 오래 남아요.", code:"E-D001", tickets:3},
-  {id:"d2", dept:"행정지원과", name:"이○○", kind:"link", text:"계절학기 강의실 예산을 맞춘 일이 학생 256명의 방학이 됐다니 뿌듯합니다.", code:"E-D002", tickets:2},
+  {id:"d1", dept:"중등교육지원과", name:"김○○", kind:"scene", text:"서른두 번의 수업 끝에 가장 많이 자란 사람은 저였다는 말이 오래 남아요.", code:"E-D001", tickets:1},
+  {id:"d2", dept:"행정지원과", name:"이○○", kind:"link", text:"계절학기 강의실 예산을 맞춘 일이 학생 256명의 방학이 됐다니 뿌듯합니다.", code:"E-D002", tickets:1},
   {id:"d3", dept:"초등교육지원과", name:"박○○", kind:"cheer", text:"29개 학교 모두 응원합니다. 선택이 성장으로!", code:"E-D003", tickets:1}
 ];
 
@@ -359,9 +359,9 @@ function showResult(r, again){
   $("#form").style.display = "none";
   $("#result").classList.add("on");
   $("#rCode").textContent = r.code;
-  $("#rTk").textContent = `추첨권 ${r.tickets}장`;
-  const li = ["퀴즈 풀기 + 이야기 벽 한 줄 · 1장"];
-  if (r.quiz === true) li.push("퀴즈 6문항 모두 정답 · +1장");
+  $("#rTk").textContent = "추첨권 1장";
+  const li = ["퀴즈 풀기 + 이야기 벽 한 줄 · 참여 완료"];
+  if (r.quiz === true) li.push("퀴즈 6문항 모두 정답! 책을 꼼꼼히 보셨네요");
   else if (r.quiz === false) li.push("퀴즈는 아쉽게 다 맞히지 못했어요" + (r.answers ? ` (정답: ${r.answers})` : ""));
   if (r.inf === true) li.push("숨은 ∞ 정답 · +1장");
   else if (r.inf === false) li.push("숨은 ∞는 아쉽게 빗나갔어요");
