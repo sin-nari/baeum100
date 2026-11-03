@@ -31,6 +31,15 @@ header.top img{height:26px}
 header.top b{font-family:var(--display);font-weight:400;font-size:20px}
 header.top .tag{margin-left:auto;font-size:13px;font-weight:700;color:var(--deep);background:var(--soft);padding:4px 12px;border-radius:999px}
 .hero{padding:44px 0 28px;position:relative}
+.staff{display:flex;align-items:center;gap:12px;margin:0 0 18px;padding:12px 18px;border-radius:16px;background:#fff4cc;border:2px solid #e8c547;color:#5a4300;font-weight:800;font-size:clamp(16px,2.6vw,19px);line-height:1.45}
+.staff .si{font-size:24px;flex-shrink:0}
+.staff small{display:block;font-weight:600;font-size:14px;color:#7a6420}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .staff{background:#3a3010;border-color:#8a7420;color:#ffe9a8}:root:not([data-theme="light"]) .staff small{color:#e8d48a}}
+:root[data-theme="dark"] .staff{background:#3a3010;border-color:#8a7420;color:#ffe9a8}
+:root[data-theme="dark"] .staff small{color:#e8d48a}
+.newp{margin-top:18px;padding:16px 22px;border:2px dashed var(--blue);border-radius:20px;background:var(--soft)}
+.newp p{margin:0 0 10px;font-weight:700}
+.newp .btn{font-size:clamp(18px,3vw,21px);padding:14px 26px;background:var(--gold);color:#14233d;box-shadow:0 4px 0 #d9b94a}
 .hero .eb{font-weight:800;color:var(--muted);font-size:15px;letter-spacing:.02em}
 .hero .book{display:inline-flex;align-items:center;gap:10px;margin:14px 0 0;padding:8px 18px 8px 12px;border-radius:14px;background:var(--soft);border:2px solid color-mix(in srgb,var(--blue) 30%,transparent);font-family:var(--display);font-size:clamp(22px,4.2vw,30px);line-height:1.2;color:var(--deep)}
 .hero .book .bk{font-size:1.1em}
@@ -130,6 +139,7 @@ header.top b{white-space:nowrap}
 
 <main class="wrap">
   <div class="hero">
+    <div class="staff" role="note"><span class="si">📌</span><div>이 페이지는 부천교육지원청 직원 이벤트용입니다<small>학교·학부모 안내용이 아니에요 · 주소를 외부에 공유하지 말아 주세요</small></div></div>
     <div class="eb">경기도부천교육지원청 직원 여러분께</div>
     <div class="book"><span class="bk" aria-hidden="true">📘</span>『부천 배움 100이음』</div>
     <h1><span class="gt">100개의 이음을</span><br>모아 주세요</h1>
@@ -199,7 +209,7 @@ header.top b{white-space:nowrap}
       <div class="tks" id="rTk">추첨권 1장</div>
       <ul id="rList"></ul>
       <p class="hint" id="rDraw"></p>
-      <p class="hint"><a href="#" id="rNew">이 기기로 다른 분이 참여하기</a></p>
+      <div class="newp"><p>옆자리 동료도 이 기기로 이어서 참여할 수 있어요</p><a href="#" id="rNew" class="btn">👥 이 기기로 다른 분이 참여하기</a></div>
     </div>
   </section>
 
@@ -210,7 +220,7 @@ header.top b{white-space:nowrap}
 </main>
 
 <footer><div class="wrap">
-  경기도부천교육지원청 중등교육지원과 · 이 페이지는 교육지원청 직원 이벤트용입니다.<br>
+  경기도부천교육지원청 중등교육지원과 · <b style="color:var(--ink)">📌 이 페이지는 교육지원청 직원 이벤트용입니다.</b><br>
   <a href="./">『부천 배움 100이음』 사이트로 가기</a>
 </div></footer>
 
@@ -372,7 +382,7 @@ function setupForm(){
 }
 
 document.addEventListener("click", e => {
-  if (e.target && e.target.id === "rNew"){
+  if (e.target && e.target.closest && e.target.closest("#rNew")){
     e.preventDefault();
     try { localStorage.removeItem("ieum.done"); } catch(x){}
     const f = $("#form"); f.reset(); $("#cnt").textContent = "0";
@@ -413,24 +423,28 @@ function renderStage(){
   const L = adminCards || [];
   $("#sMeta").textContent = `참여 ${L.length}명 · 추첨권 ${L.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
   $("#sWins").innerHTML = wins.map((p,i) => `<span>${i+1}. ${esc(p.code)} · ${esc(p.dept)} ${esc(p.masked || p.name)}</span>`).join("");
-  $("#sGo").disabled = wins.length >= CONFIG.WINNERS;
-  $("#sGo5").disabled = wins.length >= CONFIG.WINNERS;
-  $("#sAgain").disabled = !s.picks.length || s.picks[s.picks.length-1].void;
+  const lock = busy || batch;
+  $("#sGo").disabled = lock || wins.length >= CONFIG.WINNERS;
+  $("#sGo5").disabled = lock || wins.length >= CONFIG.WINNERS;
+  $("#sAgain").disabled = lock || !s.picks.length || s.picks[s.picks.length-1].void;
+  $("#sReset").disabled = lock;
 }
+let busy = false, batch = false;   // 뽑는 중에는 다른 버튼을 막아 겹쳐 뽑히지 않게
 function pickOne(done){
   done = done || (() => {});
+  if (busy) return done();
   const s = drawState();
   if (s.picks.filter(p => !p.void).length >= CONFIG.WINNERS) return done();
   const p = pool();
   if (!p.length){ $("#sWho").textContent = "더 뽑을 분이 없어요"; return done(); }
   const big = $("#sBig"), who = $("#sWho");
-  who.textContent = ""; let n = 0;
+  who.textContent = ""; let n = 0; busy = true; renderStage();
   const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 26){ clearInterval(spin); finish(); } }, 70);
   function finish(){
     const arr = new Uint32Array(1); crypto.getRandomValues(arr);
     const w = p[arr[0] % p.length];
     big.textContent = w.code; who.textContent = `${w.dept} ${w.masked || w.name}`;
-    s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }); saveDraw(s); renderStage(); done();
+    s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }); saveDraw(s); busy = false; renderStage(); done();
   }
 }
 function openStage(){ $("#gate").classList.remove("on"); $("#stage").classList.add("on"); renderStage(); }
@@ -456,7 +470,9 @@ $("#gForm").onsubmit = async e => {
 };
 $("#gClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#gate").classList.remove("on"); };
 $("#sGo").onclick = () => pickOne();
-$("#sGo5").onclick = async () => { const b = $("#sGo5"); b.disabled = true; for (let i = 0; i < 5; i++){ await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); } b.disabled = false; renderStage(); };
+$("#sGo5").onclick = async () => { if (busy || batch) return; batch = true; renderStage();
+  for (let i = 0; i < 5; i++){ if (drawState().picks.filter(p => !p.void).length >= CONFIG.WINNERS || !pool().length) break; await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); }
+  batch = false; renderStage(); };
 $("#sAgain").onclick = () => { const s = drawState(); const last = s.picks[s.picks.length-1]; if (last && !last.void){ last.void = true; saveDraw(s); $("#sWho").textContent = "다시 뽑습니다"; $("#sBig").textContent = "?"; renderStage(); } };
 $("#sCopy").onclick = async () => {
   const wins = drawState().picks.filter(p => !p.void);
@@ -469,7 +485,7 @@ $("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 �
 $("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); adminCards = null; };
 
 drawFacts(); setupForm();
-load().then(() => { if (location.hash === "#draw") enterDraw(); });
+load(); if (location.hash === "#draw") enterDraw();
 window.addEventListener("hashchange", () => { if (location.hash === "#draw") enterDraw(); });
 </script>
 </body>
