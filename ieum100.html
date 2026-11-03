@@ -99,6 +99,15 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px soli
 /* 추첨 무대 */
 #stage{display:none;position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
 #stage.on{display:flex}
+#gate{display:none;position:fixed;inset:0;z-index:60;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;align-items:center;justify-content:center;padding:24px}
+#gate.on{display:flex}
+#gate form{display:flex;flex-direction:column;gap:14px;width:min(420px,100%);text-align:center}
+#gate h2{color:#fff;margin:0}
+#gate input{font-size:22px;text-align:center;letter-spacing:.08em}
+#gate .gm{min-height:1.4em;color:var(--gold);font-weight:700}
+#gate .btn{background:var(--gold);color:#14233d;font-size:20px}
+#gate .btn.ghost{background:transparent;color:#fff;border-color:#fff}
+#stage .adm{position:absolute;top:14px;left:16px;font-size:14px;opacity:.6}
 #stage .t{font-family:var(--display);font-size:clamp(30px,5vw,54px)}
 #stage .big{font-family:var(--display);font-size:clamp(70px,14vw,170px);line-height:1;letter-spacing:.04em;color:var(--gold);min-height:1em}
 #stage .who{font-size:clamp(22px,3.4vw,36px);font-weight:800;min-height:1.4em}
@@ -205,7 +214,19 @@ header.top b{white-space:nowrap}
   <a href="./">『부천 배움 100이음』 사이트로 가기</a>
 </div></footer>
 
+<div id="gate" role="dialog" aria-label="관리자 확인">
+  <form id="gForm" autocomplete="off">
+    <h2>🔒 관리자 확인</h2>
+    <p>추첨 화면은 관리자만 열 수 있어요.</p>
+    <input type="password" id="gKey" placeholder="관리자 코드" aria-label="관리자 코드" required>
+    <button class="btn" type="submit" id="gGo">추첨 화면 열기</button>
+    <a class="btn ghost" href="#" id="gClose">돌아가기</a>
+    <div class="gm" id="gMsg" aria-live="polite"></div>
+  </form>
+</div>
+
 <div id="stage" role="dialog" aria-label="행운 추첨">
+  <div class="adm">🔒 관리자 화면</div>
   <div class="t">100개의 이음 · 행운 추첨</div>
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
@@ -380,16 +401,18 @@ function showResult(r, again){
 const LK = "ieum.draw";
 function drawState(){ try{ return JSON.parse(store.get(LK)) || { picks: [] }; }catch(e){ return { picks: [] }; } }
 function saveDraw(s){ store.set(LK, JSON.stringify(s)); }
+let adminCards = null;   // 관리자 코드로 받은 명단(이름 전체) — 이 기기 메모리에만
 function pool(){
   const s = drawState(), taken = new Set(s.picks.map(p => p.code));
   const out = [];
-  data.cards.forEach(c => { if (!taken.has(c.code)) for (let i = 0; i < (Number(c.tickets) || 1); i++) out.push(c); });
+  (adminCards || []).forEach(c => { if (!taken.has(c.code)) for (let i = 0; i < (Number(c.tickets) || 1); i++) out.push(c); });
   return out;
 }
 function renderStage(){
   const s = drawState(), wins = s.picks.filter(p => !p.void);
-  $("#sMeta").textContent = `참여 ${data.cards.length}명 · 추첨권 ${data.cards.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
-  $("#sWins").innerHTML = wins.map((p,i) => `<span>${i+1}. ${esc(p.code)} · ${esc(p.dept)} ${esc(p.name)}</span>`).join("");
+  const L = adminCards || [];
+  $("#sMeta").textContent = `참여 ${L.length}명 · 추첨권 ${L.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
+  $("#sWins").innerHTML = wins.map((p,i) => `<span>${i+1}. ${esc(p.code)} · ${esc(p.dept)} ${esc(p.masked || p.name)}</span>`).join("");
   $("#sGo").disabled = wins.length >= CONFIG.WINNERS;
   $("#sGo5").disabled = wins.length >= CONFIG.WINNERS;
   $("#sAgain").disabled = !s.picks.length || s.picks[s.picks.length-1].void;
@@ -406,27 +429,48 @@ function pickOne(done){
   function finish(){
     const arr = new Uint32Array(1); crypto.getRandomValues(arr);
     const w = p[arr[0] % p.length];
-    big.textContent = w.code; who.textContent = `${w.dept} ${w.name}`;
-    s.picks.push({ code: w.code, dept: w.dept, name: w.name, at: Date.now() }); saveDraw(s); renderStage(); done();
+    big.textContent = w.code; who.textContent = `${w.dept} ${w.masked || w.name}`;
+    s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }); saveDraw(s); renderStage(); done();
   }
 }
-function openStage(){ $("#stage").classList.add("on"); renderStage(); }
+function openStage(){ $("#gate").classList.remove("on"); $("#stage").classList.add("on"); renderStage(); }
+/* 관리자 확인: 주소 끝 #draw → 관리자 코드 → 서버가 맞다고 해야 열림 */
+const AK = "ieum.ak";
+async function unlock(key){
+  if (!CONFIG.API_URL) return false;
+  const d = await jsonp({ action: "admin", key });
+  if (d && d.ok && d.admin){ adminCards = d.cards || []; try{ sessionStorage.setItem(AK, key); }catch(e){} return true; }
+  try{ sessionStorage.removeItem(AK); }catch(e){}
+  throw new Error((d && d.error) || "관리자 코드가 맞지 않습니다.");
+}
+async function enterDraw(){
+  let k = null; try{ k = sessionStorage.getItem(AK); }catch(e){}
+  if (k){ try{ if (await unlock(k)) return openStage(); }catch(e){} }
+  $("#gMsg").textContent = ""; $("#gKey").value = ""; $("#gate").classList.add("on"); setTimeout(() => $("#gKey").focus(), 50);
+}
+$("#gForm").onsubmit = async e => {
+  e.preventDefault(); const b = $("#gGo"); b.disabled = true; $("#gMsg").textContent = "확인하는 중…";
+  try { if (await unlock($("#gKey").value.trim())) openStage(); else $("#gMsg").textContent = "서버 연결이 필요해요."; }
+  catch(err){ $("#gMsg").textContent = err.message === "timeout" || err.message === "network" ? "잠시 연결이 어렵습니다. 다시 눌러 주세요." : err.message; }
+  b.disabled = false;
+};
+$("#gClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#gate").classList.remove("on"); };
 $("#sGo").onclick = () => pickOne();
 $("#sGo5").onclick = async () => { const b = $("#sGo5"); b.disabled = true; for (let i = 0; i < 5; i++){ await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); } b.disabled = false; renderStage(); };
 $("#sAgain").onclick = () => { const s = drawState(); const last = s.picks[s.picks.length-1]; if (last && !last.void){ last.void = true; saveDraw(s); $("#sWho").textContent = "다시 뽑습니다"; $("#sBig").textContent = "?"; renderStage(); } };
 $("#sCopy").onclick = async () => {
   const wins = drawState().picks.filter(p => !p.void);
-  const txt = "[부천 배움 100이음 · 행운 추첨 결과] " + CONFIG.DRAW + "\n" + wins.map((p,i) => `${i+1}\t${p.code}\t${p.dept}\t${p.name}`).join("\n");
+  const txt = "[부천 배움 100이음 · 행운 추첨 결과] " + CONFIG.DRAW + "\n순번\t행운 코드\t부서\t이름\t퀴즈 모두 정답\n" + wins.map((p,i) => `${i+1}\t${p.code}\t${p.dept}\t${p.name}\t${p.quiz === true ? "O" : p.quiz === false ? "X" : ""}`).join("\n");
   try { await navigator.clipboard.writeText(txt); $("#sCopy").textContent = "복사했어요 ✓"; }
   catch(e){ prompt("아래 내용을 복사해 주세요", txt); }
   setTimeout(() => { $("#sCopy").textContent = "결과 복사"; }, 2000);
 };
 $("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 처음부터 할까요?")){ saveDraw({ picks: [] }); $("#sBig").textContent = "?"; $("#sWho").textContent = ""; renderStage(); } };
-$("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); };
+$("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); adminCards = null; };
 
 drawFacts(); setupForm();
-load().then(() => { if (location.hash === "#draw") openStage(); });
-window.addEventListener("hashchange", () => { if (location.hash === "#draw") openStage(); });
+load().then(() => { if (location.hash === "#draw") enterDraw(); });
+window.addEventListener("hashchange", () => { if (location.hash === "#draw") enterDraw(); });
 </script>
 </body>
 </html>
