@@ -399,9 +399,6 @@ function showResult(r, again){
   const li = ["퀴즈 풀기 + 이야기 벽 한 줄 · 참여 완료"];
   if (r.quiz === true) li.push("퀴즈 6문항 모두 정답! 책을 꼼꼼히 보셨네요");
   else if (r.quiz === false) li.push("퀴즈는 아쉽게 다 맞히지 못했어요" + (r.answers ? ` (정답: ${r.answers})` : ""));
-  if (r.inf === true) li.push("숨은 ∞ 정답 · +1장");
-  else if (r.inf === false) li.push("숨은 ∞는 아쉽게 빗나갔어요");
-  else if (r.infPending) li.push("숨은 ∞ 답은 마감 뒤 채점해서 추첨권에 더해 드려요");
   if (r.demo) li.push("미리보기라 실제로 저장되지 않았어요");
   $("#rList").innerHTML = li.map(x => `<li>${esc(x)}</li>`).join("");
   $("#rDraw").textContent = `${CONFIG.DRAW} 때 이 행운 코드가 화면에 나오면 당첨입니다. 코드를 기억해 두세요.` + (again ? " (이미 참여하셨어요)" : "");
