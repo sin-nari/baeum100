@@ -272,6 +272,7 @@ const CONFIG = {
   DRAW: "11. 13.(금) 14:00 Zoom 실시간 추첨(예정)",   // 추첨 안내
   PRIZE: "혜림 커피 쿠폰",
   WINNERS: 30,                 // 당첨 인원
+  EXCLUDE: ["E-34A1", "E-3A42", "E-708A", "E-5F1B"],   // 추첨·이야기 벽에서 뺄 행운 코드(테스트: 신나리, 나리나리신나리, 홍길동, 빈 줄)
   GOAL: 100
 };
 const KINDS = [
@@ -343,7 +344,7 @@ async function load(){
   } else {
     try {
       const d = await jsonp({});
-      if (d && d.ok){ data = d; $("#wStatus").textContent = ""; }
+      if (d && d.ok){ data = d; data.cards = (d.cards || []).filter(c => !CONFIG.EXCLUDE.includes(c.code)); data.count = data.cards.length; $("#wStatus").textContent = ""; }
     } catch(e){ $("#wStatus").textContent = "잠시 연결이 어렵습니다. 새로고침해 주세요."; }
   }
   drawMeter(); drawWall();
@@ -469,7 +470,7 @@ const AK = "ieum.ak";
 async function unlock(key){
   if (!CONFIG.API_URL) return false;
   const d = await jsonp({ action: "admin", key });
-  if (d && d.ok && d.admin){ adminCards = d.cards || []; try{ sessionStorage.setItem(AK, key); }catch(e){} return true; }
+  if (d && d.ok && d.admin){ adminCards = (d.cards || []).filter(c => !CONFIG.EXCLUDE.includes(c.code)); try{ sessionStorage.setItem(AK, key); }catch(e){} return true; }
   try{ sessionStorage.removeItem(AK); }catch(e){}
   throw new Error((d && d.error) || "관리자 코드가 맞지 않습니다.");
 }
