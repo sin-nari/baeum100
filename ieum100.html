@@ -132,8 +132,8 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px soli
 #gate .btn.ghost{background:transparent;color:#fff;border-color:#fff}
 #stage .adm{display:none}
 #stage .t{font-family:var(--display);font-size:clamp(30px,5vw,54px)}
-#stage .big{font-family:var(--display);font-size:clamp(70px,14vw,170px);line-height:1;letter-spacing:.04em;color:var(--gold);min-height:1em}
-#stage .who{font-size:clamp(22px,3.4vw,36px);font-weight:800;min-height:1.4em}
+#stage .big{font-family:var(--display);white-space:nowrap;font-size:clamp(56px,8.5vw,120px);line-height:1;letter-spacing:.04em;color:var(--gold);min-height:1em}
+#stage .who{font-size:clamp(24px,3.2vw,42px);font-weight:800;min-height:1.4em}
 #stage .meta{opacity:.75}
 #stage .wins{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:1100px}
 #stage .wins span{background:rgba(255,255,255,.12);border-radius:999px;padding:6px 14px;font-weight:700}
@@ -437,14 +437,14 @@ function pool(){
 function renderStage(){
   const s = drawState(), wins = s.picks.filter(p => !p.void);
   const L = adminCards || [];
-  $("#sMeta").textContent = `참여 ${L.length}명 · 추첨권 ${L.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
+  if (!revealing) $("#sMeta").textContent = `참여 ${L.length}명 · 추첨권 ${L.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
   if (!revealing) $("#sWins").innerHTML = wins.map(p => `<li><span>${esc(p.name)} <small>${esc(p.dept)}</small></span></li>`).join("");
-  $("#sCnt").textContent = `${wins.length} / ${CONFIG.WINNERS}`;
+  if (!revealing) $("#sCnt").textContent = `${wins.length} / ${CONFIG.WINNERS}`;
   const lock = busy || batch;
   $("#sGo").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sAll").disabled = lock || wins.length >= CONFIG.WINNERS;
   const rd = Math.floor(wins.length / ROUND) + 1, last = Math.ceil(CONFIG.WINNERS / ROUND);
-  $("#sAll").textContent = wins.length >= CONFIG.WINNERS ? "🎉 추첨 끝" : `🎉 10명 뽑기 (${Math.min(rd, last)}/${last})`;
+  if (!revealing) $("#sAll").textContent = wins.length >= CONFIG.WINNERS ? "🎉 추첨 끝" : `🎉 10명 뽑기 (${Math.min(rd, last)}/${last})`;
   $("#sGo5").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sAgain").disabled = lock || !s.picks.length || s.picks[s.picks.length-1].void;
   $("#sReset").disabled = lock;
@@ -493,34 +493,42 @@ $("#sGo").onclick = () => pickOne();
 /* 10명씩(세 번이면 30명): 돌아가는 코드 → 오른쪽 명단에 한 명씩 천천히 */
 $("#sAll").onclick = () => {
   if (busy || batch) return;
-  const s = drawState(), left = Math.min(ROUND, CONFIG.WINNERS - s.picks.filter(p => !p.void).length);
+  const s = drawState(), before = s.picks.filter(p => !p.void).length, left = Math.min(ROUND, CONFIG.WINNERS - before);
   const p = pool(); if (!p.length){ $("#sWho").textContent = "더 뽑을 분이 없어요"; return; }
-  batch = true; renderStage();
-  const big = $("#sBig"), who = $("#sWho"); who.textContent = "두근두근…"; let n = 0;
-  const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 50){ clearInterval(spin); finish(); } }, 70);
-  function finish(){
-    // 사람 단위로 섞어서(추첨권 장수만큼 가중) 겹치지 않게 뽑기
-    const picked = [], seen = new Set(), bag = p.slice();
-    while (picked.length < left && bag.length){
-      const a = new Uint32Array(1); crypto.getRandomValues(a);
-      const w = bag[a[0] % bag.length];
-      for (let i = bag.length - 1; i >= 0; i--) if (bag[i].code === w.code) bag.splice(i, 1);
-      if (!seen.has(w.code)){ seen.add(w.code); picked.push(w); }
-    }
-    picked.forEach(w => s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }));
-    saveDraw(s);
-    const total = s.picks.filter(x => !x.void).length;
-    big.textContent = "🎉"; who.textContent = total >= CONFIG.WINNERS ? `${CONFIG.WINNERS}분 모두 뽑았어요! 축하합니다` : `${picked.length}분 당첨! (지금까지 ${total}분)`;
-    revealing = true; renderStage();
-    const ol = $("#sWins"); const wins = s.picks.filter(x => !x.void); const start = wins.length - picked.length;
-    ol.innerHTML = wins.slice(0, start).map(x => `<li><span>${esc(x.name)} <small>${esc(x.dept)}</small></span></li>`).join("");
-    picked.forEach((w, i) => setTimeout(() => {
-      ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
-      ol.lastElementChild.scrollIntoView({ block: "nearest" });
-      if (i === picked.length - 1){ revealing = false; batch = false; renderStage(); ol.scrollTop = 0; }
-    }, 550 * (i + 1)));
-    if (!picked.length){ revealing = false; batch = false; renderStage(); }
+  // 사람 단위로 섞어서(추첨권 장수만큼 가중) 겹치지 않게 먼저 정해 저장 → 화면에는 한 명씩 공개
+  const picked = [], bag = p.slice();
+  while (picked.length < left && bag.length){
+    const a = new Uint32Array(1); crypto.getRandomValues(a);
+    const w = bag[a[0] % bag.length];
+    for (let i = bag.length - 1; i >= 0; i--) if (bag[i].code === w.code) bag.splice(i, 1);
+    picked.push(w);
   }
+  picked.forEach(w => s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }));
+  saveDraw(s);
+  batch = true; revealing = true; renderStage();
+  const big = $("#sBig"), who = $("#sWho"), ol = $("#sWins");
+  const SPIN = 1800, HOLD = 1700;   // 한 명마다: 코드 돌리기 1.8초 → 이름 보여 주기 1.7초
+  let i = 0;
+  (function next(){
+    if (i >= picked.length){
+      const total = before + picked.length;
+      big.textContent = "🎉"; who.textContent = total >= CONFIG.WINNERS ? `${CONFIG.WINNERS}분 모두 뽑았어요! 축하합니다` : `${picked.length}분 당첨! (지금까지 ${total}분)`;
+      revealing = false; batch = false; renderStage(); ol.scrollTop = 0; return;
+    }
+    const w = picked[i]; who.textContent = `${before + i + 1}번째 행운은…`;
+    const t0 = Date.now();
+    const spin = setInterval(() => {
+      big.textContent = p[Math.floor(Math.random()*p.length)].code;
+      if (Date.now() - t0 > SPIN){
+        clearInterval(spin);
+        big.textContent = w.code; who.textContent = `🎉 ${w.name} · ${w.dept}`;
+        ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
+        ol.lastElementChild.scrollIntoView({ block: "nearest" });
+        $("#sCnt").textContent = `${before + i + 1} / ${CONFIG.WINNERS}`;
+        i++; setTimeout(next, HOLD);
+      }
+    }, 70);
+  })();
 };
 $("#sGo5").onclick = async () => { if (busy || batch) return; batch = true; renderStage();
   for (let i = 0; i < 5; i++){ if (drawState().picks.filter(p => !p.void).length >= CONFIG.WINNERS || !pool().length) break; await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); }
