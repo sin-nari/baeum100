@@ -108,6 +108,17 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px soli
 /* 추첨 무대 */
 #stage{display:none;position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
 #stage.on{display:flex}
+#stage{flex-direction:row !important;align-items:stretch !important;gap:28px !important;padding:28px !important}
+#stage .sl{flex:1 1 52%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-width:0}
+#stage .sr{flex:1 1 48%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:18px 20px;text-align:left;display:flex;flex-direction:column;min-width:0}
+#stage .sr h3{margin:0 0 8px;font-family:var(--display);font-size:clamp(22px,2.6vw,32px);color:var(--gold)}
+#stage .sr h3 span{font-size:.7em;color:#fff;opacity:.8}
+#stage .sr ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;overflow:auto;counter-reset:w;align-content:start}
+#stage .sr li{counter-increment:w;display:flex;align-items:baseline;gap:8px;font-size:clamp(15px,1.45vw,20px);font-weight:700;line-height:1.3;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.06);animation:pop .35s ease both}
+#stage .sr li::before{content:counter(w);min-width:1.6em;color:var(--gold);font-weight:900}
+#stage .sr li small{font-weight:600;opacity:.75;font-size:.82em}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:820px){#stage{flex-direction:column !important;overflow:auto}#stage .sr ol{grid-template-columns:1fr}}
 #gate{display:none;position:fixed;inset:0;z-index:60;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;align-items:center;justify-content:center;padding:24px}
 #gate.on{display:flex}
 #gate form{display:flex;flex-direction:column;gap:14px;width:min(420px,100%);text-align:center}
@@ -237,12 +248,14 @@ header.top b{white-space:nowrap}
 
 <div id="stage" role="dialog" aria-label="행운 추첨">
   <div class="adm">🔒 관리자 화면</div>
+  <div class="sl">
   <div class="t">100개의 이음 · 행운 추첨</div>
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
   <div class="who" id="sWho"></div>
-  <div class="ctl"><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
-  <div class="wins" id="sWins"></div>
+  <div class="ctl"><button class="btn" id="sAll">🎉 30명 한꺼번에 뽑기</button><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
+  </div>
+  <aside class="sr"><h3>☕ 당첨자 명단 <span id="sCnt"></span></h3><ol id="sWins"></ol></aside>
 </div>
 
 <script>
@@ -419,14 +432,16 @@ function renderStage(){
   const s = drawState(), wins = s.picks.filter(p => !p.void);
   const L = adminCards || [];
   $("#sMeta").textContent = `참여 ${L.length}명 · 추첨권 ${L.reduce((a,c)=>a+(Number(c.tickets)||1),0)}장 · 당첨 ${wins.length} / ${CONFIG.WINNERS}명`;
-  $("#sWins").innerHTML = wins.map((p,i) => `<span>${i+1}. ${esc(p.code)} · ${esc(p.dept)} ${esc(p.masked || p.name)}</span>`).join("");
+  if (!revealing) $("#sWins").innerHTML = wins.map(p => `<li><span>${esc(p.name)} <small>${esc(p.dept)}</small></span></li>`).join("");
+  $("#sCnt").textContent = `${wins.length} / ${CONFIG.WINNERS}`;
   const lock = busy || batch;
   $("#sGo").disabled = lock || wins.length >= CONFIG.WINNERS;
+  $("#sAll").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sGo5").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sAgain").disabled = lock || !s.picks.length || s.picks[s.picks.length-1].void;
   $("#sReset").disabled = lock;
 }
-let busy = false, batch = false;   // 뽑는 중에는 다른 버튼을 막아 겹쳐 뽑히지 않게
+let busy = false, batch = false, revealing = false;   // 뽑는 중에는 다른 버튼을 막아 겹쳐 뽑히지 않게
 function pickOne(done){
   done = done || (() => {});
   if (busy) return done();
@@ -467,6 +482,37 @@ $("#gForm").onsubmit = async e => {
 };
 $("#gClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#gate").classList.remove("on"); };
 $("#sGo").onclick = () => pickOne();
+/* 남은 자리(최대 30명)를 한 번에: 돌아가는 코드 → 오른쪽 명단에 한 명씩 */
+$("#sAll").onclick = () => {
+  if (busy || batch) return;
+  const s = drawState(), left = CONFIG.WINNERS - s.picks.filter(p => !p.void).length;
+  const p = pool(); if (!p.length){ $("#sWho").textContent = "더 뽑을 분이 없어요"; return; }
+  batch = true; renderStage();
+  const big = $("#sBig"), who = $("#sWho"); who.textContent = "두근두근…"; let n = 0;
+  const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 40){ clearInterval(spin); finish(); } }, 60);
+  function finish(){
+    // 사람 단위로 섞어서(추첨권 장수만큼 가중) 겹치지 않게 뽑기
+    const picked = [], seen = new Set(), bag = p.slice();
+    while (picked.length < left && bag.length){
+      const a = new Uint32Array(1); crypto.getRandomValues(a);
+      const w = bag[a[0] % bag.length];
+      for (let i = bag.length - 1; i >= 0; i--) if (bag[i].code === w.code) bag.splice(i, 1);
+      if (!seen.has(w.code)){ seen.add(w.code); picked.push(w); }
+    }
+    picked.forEach(w => s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }));
+    saveDraw(s);
+    big.textContent = "🎉"; who.textContent = `${picked.length}분이 당첨되었어요!`;
+    revealing = true; renderStage();
+    const ol = $("#sWins"); const wins = s.picks.filter(x => !x.void); const start = wins.length - picked.length;
+    ol.innerHTML = wins.slice(0, start).map(x => `<li><span>${esc(x.name)} <small>${esc(x.dept)}</small></span></li>`).join("");
+    picked.forEach((w, i) => setTimeout(() => {
+      ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
+      ol.lastElementChild.scrollIntoView({ block: "nearest" });
+      if (i === picked.length - 1){ revealing = false; batch = false; renderStage(); ol.scrollTop = 0; }
+    }, 180 * (i + 1)));
+    if (!picked.length){ revealing = false; batch = false; renderStage(); }
+  }
+};
 $("#sGo5").onclick = async () => { if (busy || batch) return; batch = true; renderStage();
   for (let i = 0; i < 5; i++){ if (drawState().picks.filter(p => !p.void).length >= CONFIG.WINNERS || !pool().length) break; await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); }
   batch = false; renderStage(); };
