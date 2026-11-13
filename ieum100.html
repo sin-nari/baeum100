@@ -543,28 +543,21 @@ $("#sAll").onclick = () => {
   saveDraw(s);
   batch = true; revealing = true; renderStage();
   const big = $("#sBig"), who = $("#sWho"), ol = $("#sWins");
-  const SPIN = 1800, HOLD = 1700;   // 한 명마다: 코드 돌리기 1.8초 → 이름 보여 주기 1.7초
-  let i = 0;
-  (function next(){
-    if (i >= picked.length){
-      const total = before + picked.length;
-      big.textContent = "🎉"; who.textContent = total >= CONFIG.WINNERS ? `${CONFIG.WINNERS}분 모두 뽑았어요! 축하합니다` : `${picked.length}분 당첨! (지금까지 ${total}분)`;
-      revealing = false; batch = false; renderStage(); ol.scrollTop = 0; return;
-    }
-    const w = picked[i]; who.textContent = `${before + i + 1}번째 행운은…`;
-    const t0 = Date.now();
-    const spin = setInterval(() => {
-      big.textContent = p[Math.floor(Math.random()*p.length)].code;
-      if (Date.now() - t0 > SPIN){
-        clearInterval(spin);
-        big.textContent = w.code; who.textContent = `🎉 ${w.name} · ${w.dept}`;
-        ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
-        ol.lastElementChild.scrollIntoView({ block: "nearest" });
-        $("#sCnt").textContent = `${before + i + 1} / ${CONFIG.WINNERS}`;
-        i++; setTimeout(next, HOLD);
-      }
-    }, 70);
-  })();
+  const SPIN = 3500, STEP = 550;   // 코드 돌리기 3.5초 → 명단에 0.55초 간격으로 한 명씩
+  who.textContent = "두근두근…"; const t0 = Date.now();
+  const spin = setInterval(() => {
+    big.textContent = p[Math.floor(Math.random()*p.length)].code;
+    if (Date.now() - t0 < SPIN) return;
+    clearInterval(spin);
+    const total = before + picked.length;
+    big.textContent = "🎉"; who.textContent = total >= CONFIG.WINNERS ? `${CONFIG.WINNERS}분 모두 뽑았어요! 축하합니다` : `${picked.length}분 당첨! (지금까지 ${total}분)`;
+    picked.forEach((w, i) => setTimeout(() => {
+      ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
+      ol.lastElementChild.scrollIntoView({ block: "nearest" });
+      $("#sCnt").textContent = `${before + i + 1} / ${CONFIG.WINNERS}`;
+      if (i === picked.length - 1){ revealing = false; batch = false; renderStage(); ol.scrollTop = 0; }
+    }, STEP * (i + 1)));
+  }, 70);
 };
 $("#sGo5").onclick = async () => { if (busy || batch) return; batch = true; renderStage();
   for (let i = 0; i < 5; i++){ if (drawState().picks.filter(p => !p.void).length >= CONFIG.WINNERS || !pool().length) break; await new Promise(r => pickOne(r)); await new Promise(r => setTimeout(r, 900)); }
