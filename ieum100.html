@@ -273,7 +273,7 @@ header.top b{white-space:nowrap}
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
   <div class="who" id="sWho"></div>
-  <div class="ctl"><button class="btn" id="sAll">🎉 10명 뽑기</button><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
+  <div class="ctl"><button class="btn" id="sAll">🎉 10명 뽑기</button><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sPub">📣 사이트에 발표</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
   </div>
   <aside class="sr"><h3>☕ 당첨자 명단 <span id="sCnt"></span></h3><ol id="sWins"></ol></aside>
 </div>
@@ -360,6 +360,7 @@ async function load(){
   } else {
     try {
       const d = await jsonp({});
+      if (d && d.ok && d.announce && d.announce.list && !SAMPLE) showWinners(d.announce.list, d.announce.at);
       if (d && d.ok){ data = d; data.cards = (d.cards || []).filter(c => !CONFIG.EXCLUDE.includes(c.code)); data.count = data.cards.length; $("#wStatus").textContent = ""; }
     } catch(e){ $("#wStatus").textContent = "잠시 연결이 어렵습니다. 새로고침해 주세요."; }
   }
@@ -444,14 +445,18 @@ const ANNOUNCE = {
   note: "",          // 예: "쿠폰은 다음 주 중 메신저로 보내 드려요."
   list: []           // ["부서", "이름", "E-0000"] 순서로 한 줄씩
 };
-(function(){
-  if (!ANNOUNCE.list.length) return;
-  const mask = n => n ? n.charAt(0) + "○".repeat(Math.max(1, n.length - 1)) : "";
-  $("#winLead").textContent = `${ANNOUNCE.date ? ANNOUNCE.date + " · " : ""}${ANNOUNCE.list.length}분께 ☕ ${CONFIG.PRIZE}을 드립니다. 축하합니다!`;
-  $("#winList").innerHTML = ANNOUNCE.list.map(([d, n, c]) => `<li><span>${esc(mask(n))} <small>${esc(d)}</small></span><code>${esc(c)}</code></li>`).join("");
-  $("#winNote").textContent = ANNOUNCE.note || "참여해 주신 모든 분께 감사드립니다.";
+function showWinners(list, at, sample){
+  if (!list || !list.length) { $("#winners").hidden = true; return; }
+  const mask = n => n && n.indexOf("○") < 0 ? n.charAt(0) + "○".repeat(Math.max(1, n.length - 1)) : (n || "");
+  const when = ANNOUNCE.date || (at ? (d => `${d.getMonth()+1}. ${d.getDate()}. 추첨`)(new Date(at)) : "");
+  $("#winLead").textContent = `${sample ? "[샘플 화면] " : ""}${when ? when + " · " : ""}${list.length}분께 ☕ ${CONFIG.PRIZE}을 드립니다. 축하합니다!`;
+  $("#winList").innerHTML = list.map(w => `<li><span>${esc(mask(w.name))} <small>${esc(w.dept)}</small></span><code>${esc(w.code)}</code></li>`).join("");
+  $("#winNote").textContent = sample ? "실제 발표가 아닌 미리보기입니다. (주소 끝 ?sample)" : (ANNOUNCE.note || "참여해 주신 모든 분께 감사드립니다.");
   $("#winners").hidden = false;
-})();
+}
+const SAMPLE = /[?&]sample\b/.test(location.search);
+if (SAMPLE) showWinners(["기획경영과","교육국","감사과","지역교육과","초등교육지원과","중등교육지원과","평생교육건강과","재무관리과","학교행정지원과","기획경영과"].map((d,i) => ({ dept: d, name: "홍길동", code: "E-" + (1000 + i*111) })), Date.now(), true);
+else if (ANNOUNCE.list.length) showWinners(ANNOUNCE.list.map(([d,n,c]) => ({ dept: d, name: n, code: c })), 0);
 
 /* ===== 추첨 무대: 주소 끝에 #draw ===== */
 const LK = "ieum.draw";
@@ -571,6 +576,19 @@ $("#sCopy").onclick = async () => {
   try { await navigator.clipboard.writeText(txt); $("#sCopy").textContent = "복사했어요 ✓"; }
   catch(e){ prompt("아래 내용을 복사해 주세요", txt); }
   setTimeout(() => { $("#sCopy").textContent = "결과 복사"; }, 2000);
+};
+$("#sPub").onclick = async () => {
+  const wins = drawState().picks.filter(p => !p.void);
+  if (!wins.length) return alert("먼저 추첨해 주세요.");
+  if (!confirm(`당첨자 ${wins.length}분을 이벤트 사이트에 발표할까요? (이름은 가려서 나갑니다)`)) return;
+  let k = null; try{ k = sessionStorage.getItem(AK); }catch(e){}
+  const b = $("#sPub"); b.disabled = true; b.textContent = "올리는 중…";
+  try {
+    const d = await jsonp({ action: "announce", key: k || "", codes: wins.map(p => p.code).join(",") });
+    if (d && d.ok){ b.textContent = `발표했어요 ✓ (${d.count}분)`; showWinners(d.announce.list, d.announce.at); }
+    else throw new Error((d && d.error) || "실패");
+  } catch(e){ b.textContent = "📣 사이트에 발표"; alert("발표하지 못했어요: " + e.message); }
+  b.disabled = false;
 };
 $("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 처음부터 할까요?")){ saveDraw({ picks: [] }); $("#sBig").textContent = "?"; $("#sWho").textContent = ""; renderStage(); } };
 $("#sClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#stage").classList.remove("on"); adminCards = null; };
