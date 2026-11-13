@@ -257,7 +257,7 @@ header.top b{white-space:nowrap}
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
   <div class="who" id="sWho"></div>
-  <div class="ctl"><button class="btn" id="sAll">🎉 30명 한꺼번에 뽑기</button><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
+  <div class="ctl"><button class="btn" id="sAll">🎉 10명 뽑기</button><button class="btn" id="sGo">한 명 뽑기</button><button class="btn" id="sGo5">5명 뽑기</button><button class="btn ghost" id="sAgain">자리에 없어요 · 다시</button><button class="btn ghost" id="sCopy">결과 복사</button><button class="btn ghost" id="sReset">처음부터</button><a class="btn ghost" href="#" id="sClose">닫기</a></div>
   </div>
   <aside class="sr"><h3>☕ 당첨자 명단 <span id="sCnt"></span></h3><ol id="sWins"></ol></aside>
 </div>
@@ -424,6 +424,7 @@ function showResult(r, again){
 
 /* ===== 추첨 무대: 주소 끝에 #draw ===== */
 const LK = "ieum.draw";
+const ROUND = 10;   // 한 번에 뽑는 인원
 function drawState(){ try{ return JSON.parse(store.get(LK)) || { picks: [] }; }catch(e){ return { picks: [] }; } }
 function saveDraw(s){ store.set(LK, JSON.stringify(s)); }
 let adminCards = null;   // 관리자 코드로 받은 명단(이름 전체) — 이 기기 메모리에만
@@ -442,6 +443,8 @@ function renderStage(){
   const lock = busy || batch;
   $("#sGo").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sAll").disabled = lock || wins.length >= CONFIG.WINNERS;
+  const rd = Math.floor(wins.length / ROUND) + 1, last = Math.ceil(CONFIG.WINNERS / ROUND);
+  $("#sAll").textContent = wins.length >= CONFIG.WINNERS ? "🎉 추첨 끝" : `🎉 10명 뽑기 (${Math.min(rd, last)}/${last})`;
   $("#sGo5").disabled = lock || wins.length >= CONFIG.WINNERS;
   $("#sAgain").disabled = lock || !s.picks.length || s.picks[s.picks.length-1].void;
   $("#sReset").disabled = lock;
@@ -487,14 +490,14 @@ $("#gForm").onsubmit = async e => {
 };
 $("#gClose").onclick = e => { e.preventDefault(); history.replaceState(null, "", location.pathname); $("#gate").classList.remove("on"); };
 $("#sGo").onclick = () => pickOne();
-/* 남은 자리(최대 30명)를 한 번에: 돌아가는 코드 → 오른쪽 명단에 한 명씩 */
+/* 10명씩(세 번이면 30명): 돌아가는 코드 → 오른쪽 명단에 한 명씩 천천히 */
 $("#sAll").onclick = () => {
   if (busy || batch) return;
-  const s = drawState(), left = CONFIG.WINNERS - s.picks.filter(p => !p.void).length;
+  const s = drawState(), left = Math.min(ROUND, CONFIG.WINNERS - s.picks.filter(p => !p.void).length);
   const p = pool(); if (!p.length){ $("#sWho").textContent = "더 뽑을 분이 없어요"; return; }
   batch = true; renderStage();
   const big = $("#sBig"), who = $("#sWho"); who.textContent = "두근두근…"; let n = 0;
-  const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 40){ clearInterval(spin); finish(); } }, 60);
+  const spin = setInterval(() => { big.textContent = p[Math.floor(Math.random()*p.length)].code; if (++n > 50){ clearInterval(spin); finish(); } }, 70);
   function finish(){
     // 사람 단위로 섞어서(추첨권 장수만큼 가중) 겹치지 않게 뽑기
     const picked = [], seen = new Set(), bag = p.slice();
@@ -506,7 +509,8 @@ $("#sAll").onclick = () => {
     }
     picked.forEach(w => s.picks.push({ code: w.code, dept: w.dept, name: w.name, masked: w.masked, quiz: w.quiz, at: Date.now() }));
     saveDraw(s);
-    big.textContent = "🎉"; who.textContent = `${picked.length}분이 당첨되었어요!`;
+    const total = s.picks.filter(x => !x.void).length;
+    big.textContent = "🎉"; who.textContent = total >= CONFIG.WINNERS ? `${CONFIG.WINNERS}분 모두 뽑았어요! 축하합니다` : `${picked.length}분 당첨! (지금까지 ${total}분)`;
     revealing = true; renderStage();
     const ol = $("#sWins"); const wins = s.picks.filter(x => !x.void); const start = wins.length - picked.length;
     ol.innerHTML = wins.slice(0, start).map(x => `<li><span>${esc(x.name)} <small>${esc(x.dept)}</small></span></li>`).join("");
@@ -514,7 +518,7 @@ $("#sAll").onclick = () => {
       ol.insertAdjacentHTML("beforeend", `<li><span>${esc(w.name)} <small>${esc(w.dept)}</small></span></li>`);
       ol.lastElementChild.scrollIntoView({ block: "nearest" });
       if (i === picked.length - 1){ revealing = false; batch = false; renderStage(); ol.scrollTop = 0; }
-    }, 180 * (i + 1)));
+    }, 550 * (i + 1)));
     if (!picked.length){ revealing = false; batch = false; renderStage(); }
   }
 };
