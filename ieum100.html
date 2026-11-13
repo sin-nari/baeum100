@@ -578,7 +578,8 @@ $("#sPub").onclick = async () => {
   const b = $("#sPub"); b.disabled = true; b.textContent = "올리는 중…";
   try {
     const d = await jsonp({ action: "announce", key: k || "", codes: wins.map(p => p.code).join(",") });
-    if (d && d.ok){ b.textContent = `발표했어요 ✓ (${d.count}분)`; showWinners(d.announce.list, d.announce.at); }
+    if (d && d.ok && d.announce && d.announce.list){ b.textContent = `발표했어요 ✓ (${d.count}분)`; showWinners(d.announce.list, d.announce.at); }
+    else if (d && d.ok) throw new Error("서버가 아직 발표 기능이 없는 예전 버전이에요. Apps Script에 새 코드를 붙여 넣고 '새 버전'으로 배포해 주세요.");
     else throw new Error((d && d.error) || "실패");
   } catch(e){ b.textContent = "📣 사이트에 발표"; alert("발표하지 못했어요: " + e.message); }
   b.disabled = false;
@@ -587,7 +588,7 @@ $("#sUnpub").onclick = async () => {
   if (!confirm("이벤트 사이트의 당첨자 발표를 내릴까요?")) return;
   let k = null; try{ k = sessionStorage.getItem(AK); }catch(e){}
   try { const d = await jsonp({ action: "announce", key: k || "", codes: "" });
-    if (d && d.ok){ $("#winners").hidden = true; $("#sPub").textContent = "📣 사이트에 발표"; alert("발표를 내렸어요."); } else throw new Error((d && d.error) || "실패"); }
+    if (d && d.ok && "announce" in d){ $("#winners").hidden = true; $("#sPub").textContent = "📣 사이트에 발표"; alert("발표를 내렸어요."); } else throw new Error(d && d.ok ? "서버가 아직 예전 버전이에요. 새 버전으로 배포해 주세요." : ((d && d.error) || "실패")); }
   catch(e){ alert("내리지 못했어요: " + e.message); }
 };
 $("#sReset").onclick = () => { if (confirm("추첨 결과를 모두 지우고 처음부터 할까요?")){ saveDraw({ picks: [] }); $("#sBig").textContent = "?"; $("#sWho").textContent = ""; renderStage(); } };
