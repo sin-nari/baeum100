@@ -109,6 +109,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px soli
 #stage{display:none;position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#123d73,#071a33);color:#fff;z-index:50;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
 #stage.on{display:flex}
 #stage{flex-direction:row !important;align-items:stretch !important;gap:28px !important;padding:28px !important}
+#stage .quiet{display:flex;flex-direction:column;gap:4px;align-items:center;background:rgba(255,226,138,.14);border:2px solid var(--gold);border-radius:18px;padding:10px 20px;max-width:100%}
+#stage .quiet b{font-size:clamp(18px,2.1vw,26px);color:var(--gold)}
+#stage .quiet span{font-size:clamp(13px,1.3vw,17px);opacity:.92}
 #stage .sl{flex:1 1 52%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;min-width:0}
 #stage .sr{flex:1 1 48%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:18px 20px;text-align:left;display:flex;flex-direction:column;min-width:0}
 #stage .sr h3{margin:0 0 8px;font-family:var(--display);font-size:clamp(22px,2.6vw,32px);color:var(--gold)}
@@ -127,7 +130,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:14px;border-top:1px soli
 #gate .gm{min-height:1.4em;color:var(--gold);font-weight:700}
 #gate .btn{background:var(--gold);color:#14233d;font-size:20px}
 #gate .btn.ghost{background:transparent;color:#fff;border-color:#fff}
-#stage .adm{position:absolute;top:14px;left:16px;font-size:14px;opacity:.6}
+#stage .adm{display:none}
 #stage .t{font-family:var(--display);font-size:clamp(30px,5vw,54px)}
 #stage .big{font-family:var(--display);font-size:clamp(70px,14vw,170px);line-height:1;letter-spacing:.04em;color:var(--gold);min-height:1em}
 #stage .who{font-size:clamp(22px,3.4vw,36px);font-weight:800;min-height:1.4em}
@@ -249,6 +252,7 @@ header.top b{white-space:nowrap}
 <div id="stage" role="dialog" aria-label="행운 추첨">
   <div class="adm">🔒 관리자 화면</div>
   <div class="sl">
+  <div class="quiet"><b>🤫 조용한 Zoom 추첨 · 11. 13.(금) 14:00</b><span>마이크·카메라는 꺼 두셔도 돼요 · 말없이 진행합니다 · 추첨 화면만 지켜보세요</span><span>☕ 혜림 커피(4,000원) 쿠폰은 누구에게 갈까요?</span></div>
   <div class="t">100개의 이음 · 행운 추첨</div>
   <div class="meta" id="sMeta"></div>
   <div class="big" id="sBig">?</div>
